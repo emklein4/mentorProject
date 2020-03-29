@@ -257,9 +257,71 @@
             </div>
 
 
-            <button id="LogIn" type="submit" onclick="LogOn(getElementById('uname').value, getElementById('psw').value)">Create Account</button>
+            <button id="create" type="button" onclick="createNewAccount()">Create Account</button>
 
         </form>
     </div>
+    <script>
+                /* function simpleFileUpload(file) {
+            var formData = new FormData();
+            formData.append('file', file);
+
+
+            var webMethod = "ProjectServices.asmx/UploadFile";
+            var parameters = "{\"context\":\"" + formData + "\"}";
+
+            console.log(formData.file);
+
+            // jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                contentType: false,
+                processData: false,
+                data: parameters,
+                success: function (data) {
+                    console.log(data.d);
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                    console.log(e.responseText);
+                }
+            }); 
+        }*/
+
+        function createNewAccount() {
+            let fname = document.getElementById("fname").value;
+            let lname = document.getElementById("lname").value;
+            let pass = document.getElementById("psw").value;
+            let email = document.getElementById("email").value;
+            let dept = document.getElementById("dep").value;
+            let role = document.getElementById("role").value;
+            let personality = document.getElementById("fname").value;
+            let resume
+
+            var webMethod = "ProjectServices.asmx/CreateAccount";
+            var parameters = "{\"fname\":\"" + encodeURI(fname) + "\", \"lname\":\"" + encodeURI(lname) + "\","
+                + "\"pass\":\"" + encodeURI(pass) + "\", \"email\":\"" + encodeURI(email) + "\"," +
+                "\"dept\":\"" + encodeURI(dept) + "\", \"role\":\"" + encodeURI(role) + "\"," +
+                "\"personality\":\"" + encodeURI(personality) + "\"}";
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    alert("Account Created");
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+    </script>
 </body>
+
+
 </html>

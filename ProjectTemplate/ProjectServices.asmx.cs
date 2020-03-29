@@ -59,7 +59,7 @@ namespace ProjectTemplate
 				return "Something went wrong, please check your credentials and db name and try again.  Error: "+e.Message;
 			}
 		}
-        [WebMethod]
+        /*[WebMethod]
         public void ProcessRequest(HttpContext context)
             {
                 if (context.Request.Files.Count > 0)
@@ -74,7 +74,7 @@ namespace ProjectTemplate
                     context.Response.ContentType = "text/plain";
                 }
 
-            }
+            }*/
         
         [WebMethod]
         public void CreateAccount(string fname, string lname, string email, string pass, string personality,
@@ -109,6 +109,6 @@ namespace ProjectTemplate
             {
             }
             sqlConnection.Close();
-        } */
+        }
 	}
 }
