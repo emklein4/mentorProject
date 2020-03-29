@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>New Account</title>
+    <!--DO NOT FORGET THIS SCRIPT TAG SO YOU CAN USE JQUERY!!!!!-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!--AND YOUR OWN CSS CAN GO HERE AS WELL-->
+    <style>
+        /* Split the screen in half */
+        .split {
+            height: 100%;
+            width: 50%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        /* Control the left side */
+        .left {
+            left: 0;
+            
+        }
+
+        /* Control the right side */
+        .right {
+            right: 0;
+            
+        }
+
+        /* If you want the content centered horizontally and vertically */
+        .centered {
+            /*position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);*/
+            text-align: center;
+            
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: url(backgroundImage.png);
+            background-position: center;
+            font-family: sans-serif;
+        }
+
+        #LogIn {
+            background-color: #8C1D40;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            padding: 10px;
+            color: #ffffff;
+            font-weight: bold;
+            background: #8C1D40;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 2px solid #dddddd;
+        }
+
+        #Logon {
+            width: 700px;
+            height: 420px;
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            top: 50%;
+            left: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            box-sizing: border-box;
+            padding: 70px 30px;
+        }
+
+            #Logon input, select {
+                width: 50%;
+                margin-bottom: 20px;
+            }
+
+            #Logon input[type="text"], input[type="password"], select{
+                border: none;
+                border-bottom: 1px solid #fff;
+                background: transparent;
+                outline: none;
+                height: 40px;
+                color: #fff;
+                font-size: 16px;
+            }
+
+            #Logon option {
+                background: black;
+            }
+            
+            #Logon select:hover {
+                cursor:pointer;
+
+            }
+
+            #Logon p {
+                margin: 0;
+                padding: 0;
+                font-weight: bold;
+            }
+
+            #Logon button {
+                border: none;
+                outline: none;
+                height: 40px;
+                background: #1c8adb;
+                color: #fff;
+                font-size: 18px;
+                border-radius: 20px;
+                margin-top:360px;
+                
+            }
+
+            #Logon button:hover {
+                cursor: pointer;
+                background: #39dc79;
+                color: #000;
+            }
+
+            #Logon a {
+                text-decoration: none;
+                font-size: 14px;
+                color: #fff;
+            }
+
+            #Logon a:hover {
+                color: #39dc79;
+            }
+
+        /*.buttons {
+            background-color: #8C1D40;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+        }*/
+
+        .logoImage {
+            padding: 30px;
+            background: rgba(0,0,0,0.25);
+            display: block;
+            max-width: 125px;
+            margin: 0;
+        }
+
+        .log {
+            padding: 12px 20px;
+            margin: 0 auto;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 2px solid #dddddd;
+            background: #ffffff;
+            outline: none;
+            transition: border-color 0.5s;
+        }
+
+        .avator {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            position: absolute;
+            top: -50px;
+            left: calc(50% - 50px);
+        }
+
+        h1 {
+            margin: 0;
+            padding: 0 0 20px;
+            text-align: center;
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+    <div id="Logon">
+        <a id="logoImage" title="Mentor/ Mentee Program Logo"><img src="logo.png" class="avator"><br /></a>
+        
+        <form>
+            <div class="split left">
+                <div class="centered">
+                    <p>First Name</p>
+                    <input class="log" type="text" placeholder="Enter First Name" id="fname" required>
+
+                    <p>Last Name</p>
+                    <input class="log" type="text" placeholder="Enter Last Name" id="lname" required>
+
+                    <p>E-mail</p>
+                    <input class="log" type="text" placeholder="Enter e-mail" id="email" required>
+
+                    <p>Password</p>
+                    <input class="log" type="password" placeholder="Enter Password" id="psw" required>
+
+                    <p>Department</p>
+                    <input class="log" type="text" placeholder="Enter Department" id="dep" required>
+                </div>
+            </div>
+
+            <div class="split right">
+                <div class="centered">
+                    <p>Role</p>
+                    <input class="log" type="text" placeholder="Enter Role" id="role" required>
+
+                    <p>Personality Characteristics</p>
+                    <select>
+                        <option label="Select 1st"></option>
+                        <option value="1">Outgoing</option>
+                        <option value="2">Honest</option>
+                        <option value="2">Generous</option>
+                        <option value="2">Approachable</option>
+                        <option value="2">Hard-worker</option>
+                    </select>
+
+                    <select>
+                        <option label="Select 2nd"></option>
+                        <option value="1">Outgoing</option>
+                        <option value="2">Honest</option>
+                        <option value="2">Generous</option>
+                        <option value="2">Approachable</option>
+                        <option value="2">Hard-worker</option>
+                    </select>
+
+                    <select>
+                        <option label="Select 3rd"></option>
+                        <option value="1">Outgoing</option>
+                        <option value="2">Honest</option>
+                        <option value="2">Generous</option>
+                        <option value="2">Approachable</option>
+                        <option value="2">Hard-worker</option>
+                    </select>
+
+                    <p>Upload Resume</p>
+                    <input type="file">
+                </div>
+            </div>
+
+
+            <button id="LogIn" type="submit" onclick="LogOn(getElementById('uname').value, getElementById('psw').value)">Create Account</button>
+
+        </form>
+    </div>
+</body>
+</html>
