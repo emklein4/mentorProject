@@ -59,20 +59,40 @@ namespace ProjectTemplate
 				return "Something went wrong, please check your credentials and db name and try again.  Error: "+e.Message;
 			}
 		}
-
         [WebMethod]
-        public void CheckoutBook(string ID, string ISBN, double daysOut)
+        public void ProcessRequest(HttpContext context)
+            {
+                if (context.Request.Files.Count > 0)
+                {
+                    HttpFileCollection files = context.Request.Files;
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        HttpPostedFile file = files[i];
+                        string fname = context.Server.MapPath("~/uploads/" + file.FileName);
+                        file.SaveAs(fname);
+                    }
+                    context.Response.ContentType = "text/plain";
+                }
+
+            }
+        
+        [WebMethod]
+        public void CreateAccount(string fname, string lname, string email, string pass, string personality,
+            string dept, string role)
         {
-            string sqlSelect = "insert into users (ID, ISBN, returndate, checkoutdate) " +
-                "values(@idValue, @ISBNValue, @returndateValue, @checkoutdateValue);";
+            string sqlSelect = "insert into Staff (Lastname, Firstname, Email, password, Department, StaffTitle, Personality) " +
+                "values(@lastValue, @firstValue, @emailValue, @passValue, @deptValue, @roleValue, @personValue);";
 
             MySqlConnection sqlConnection = new MySqlConnection(getConString());
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
 
-            sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(ID));
-            sqlCommand.Parameters.AddWithValue("@ISBNValue", HttpUtility.UrlDecode(ISBN));
-            sqlCommand.Parameters.AddWithValue("@checkoutdateValue", DateTime.UtcNow.AddDays(0));
-            sqlCommand.Parameters.AddWithValue("@returndateValue", DateTime.UtcNow.AddDays(daysOut));
+            sqlCommand.Parameters.AddWithValue("@lastValue", HttpUtility.UrlDecode(lname));
+            sqlCommand.Parameters.AddWithValue("@firstValue", HttpUtility.UrlDecode(fname));
+            sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(email));
+            sqlCommand.Parameters.AddWithValue("@passValue", HttpUtility.UrlDecode(pass));
+            sqlCommand.Parameters.AddWithValue("@deptValue", HttpUtility.UrlDecode(dept));
+            sqlCommand.Parameters.AddWithValue("@roleValue", HttpUtility.UrlDecode(role));
+            sqlCommand.Parameters.AddWithValue("@personValue", HttpUtility.UrlDecode(personality));
 
             //this time, we're not using a data adapter to fill a data table.  We're just
             //opening the connection, telling our command to "executescalar" which says basically
@@ -89,6 +109,6 @@ namespace ProjectTemplate
             {
             }
             sqlConnection.Close();
-        }
+        } */
 	}
 }

@@ -27,7 +27,66 @@
 					alert("this code will only execute if javascript is unable to access the webservice");
 				}
 			});
-		}
+        }
+
+        function createNewAccount() {
+            let fname
+            let lname
+            let pass
+            let email
+            let dept
+            let role
+            let personality
+            let resume
+
+            var webMethod = "ProjectServices.asmx/CreateAccount";
+            var parameters = "{\"fname\":\"" + encodeURI(fname) + "\", \"lname\":\"" + encodeURI(lname) + "\","
+                + "\"pass\":\"" + encodeURI(pass) + "\", \"email\":\"" + encodeURI(email) + "\"," + 
+                "\"dept\":\"" + encodeURI(dept) + "\", \"role\":\"" + encodeURI(role) + "\"," +
+                "\"personality\":\"" + encodeURI(personality) + "\"}";
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    alert("Account Created");
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+
+        /* function simpleFileUpload(file) {
+            var formData = new FormData();
+            formData.append('file', file);
+
+
+            var webMethod = "ProjectServices.asmx/UploadFile";
+            var parameters = "{\"context\":\"" + formData + "\"}";
+
+            console.log(formData.file);
+
+            // jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                contentType: false,
+                processData: false,
+                data: parameters,
+                success: function (data) {
+                    console.log(data.d);
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                    console.log(e.responseText);
+                }
+            }); 
+        }*/
 	</script>
 	<!--END OF YOUR OWN JAVASCRIPT-->
 
@@ -39,5 +98,9 @@
 </head >
 <body>
 	<button onclick="javascript: TestButtonHandler();">Click here to test connection!</button>
+    <form>
+        <input type="file" id="fileUpload" />
+    </form>
+    
 </body>
 </html >
