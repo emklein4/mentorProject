@@ -62,14 +62,14 @@
             });
         }
 
-        function LogOn(sid, pass) {
+        function LogOn(email, pass) {
             //the url of the webservice we will be talking to
             var webMethod = "ProjectServices.asmx/LogOn";
             //the parameters we will pass the service (in json format because curly braces)
             //note we encode the values for transmission over the web.  All the \'s are just
             //because we want to wrap our keynames and values in double quotes so we have to
             //escape the double quotes (because the overall string we're creating is in double quotes!)
-            var parameters = "{\"uid\":\"" + encodeURI(sid) + "\",\"pass\":\"" + encodeURI(pass) + "\"}";
+            var parameters = "{\"email\":\"" + encodeURI(email) + "\",\"pass\":\"" + encodeURI(pass) + "\"}";
 
             //jQuery ajax method
             $.ajax({
@@ -92,8 +92,8 @@
                         //server replied true
                         activeID = id.d;
                         alert("Logged In!")
-                        LoadUser();
                         //var x = document.getElementById("buttonsID");
+                        LoadUser();
                         var y = document.getElementById("Logon");
                         //x.style.display = "block";
                         y.style.display = "none";
@@ -320,7 +320,7 @@
                 <p>Password</p>
                 <input class="log" type="password" placeholder="Enter Password" id="psw" required>
 
-                <button id="LogIn" type="submit" onclick="LogOn(getElementById('email').value, getElementById('psw').value)">Login</button>
+                <button id="LogIn" type="button" onclick="LogOn(getElementById('email').value, getElementById('psw').value)">Login</button>
                 <a href="newUser.html">Create Account</a>
                 
                 <a href="#" id="forgot">Forget Password</a>

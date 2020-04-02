@@ -77,14 +77,14 @@ namespace ProjectTemplate
             }*/
 
         [WebMethod(EnableSession = true)] //NOTICE: gotta enable session on each individual method
-        public string LogOn(string uid, string pass)
+        public string LogOn(string email, string pass)
         {
             //we return this flag to tell them if they logged in or not
 
             //our connection string comes from our web.config file like we talked about earlier
             //here's our query.  A basic select with nothing fancy.  Note the parameters that begin with @
             //NOTICE: we added admin to what we pull, so that we can store it along with the id in the session
-            string sqlSelect = "SELECT StaffId, Admin FROM Staff WHERE Email=@emailValue and password=@passValue";
+            string sqlSelect = "SELECT StaffId, Admin FROM Staff WHERE Email=@emailValue and password=@passValue;";
 
             //set up our connection object to be ready to use our connection string
             MySqlConnection con = new MySqlConnection(getConString());
@@ -94,7 +94,7 @@ namespace ProjectTemplate
             //tell our command to replace the @parameters with real values
             //we decode them because they came to us via the web so they were encoded
             //for transmission (funky characters escaped, mostly)
-            sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(uid));
+            sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(email));
             sqlCommand.Parameters.AddWithValue("@passValue", HttpUtility.UrlDecode(pass));
 
             //a data adapter acts like a bridge between our command object and 
