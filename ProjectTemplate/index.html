@@ -97,18 +97,11 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (id) {
+
                     var activeUser = id.d;
-
-
-                    //var stmt = "<h1>" + activeUser.f_name + "'s Books</h1><table id = 'booktable'><tr><th></th> <th> Book</th> <th>Return Date</th>"
-                    //for (var i = 0; i < activeUser.books.length; i++) {
-                    //    stmt = stmt + "<tr><td class ='checkID'><input type='checkbox' class='returnSelection' value='" + activeUser.books[i].isbn + "'></td><td id ='bookId'>" + activeUser.books[i].title +
-                    //        "</td><td>" + activeUser.books[i].returndate.replace("12:00:00 AM", "") + "</td></tr>"
-                    //}
-                    //stmt = stmt + "</table>";
-                    //document.getElementById("rentedbooks").innerHTML = stmt;
-                    var stmt = activeUser.fname;
-                    stmt = stmt + "<iframe src= 'https://calendar.google.com/calendar/embed?src=asu.edu_6p28703btj82p1fvo7o1ld8kv4%40group.calendar.google.com&ctz=America%2FPhoenix' style='border: 0' width='800' height='600' frameborder='0' scrolling='no'></iframe>"
+                    document.getElementById('navigation').style.display = "block";
+                    var stmt = "<br><br><br><br>";
+                    stmt = stmt + "<iframe src= 'https://calendar.google.com/calendar/embed?src=asu.edu_6p28703btj82p1fvo7o1ld8kv4%40group.calendar.google.com&ctz=America%2FPhoenix' style='border: 0' width='900' height='600' frameborder='0' scrolling='no' align='middle' float='right'></iframe>"
                     document.getElementById("homePage").innerHTML = stmt;
                 },
                 error: function (e) {
@@ -149,10 +142,39 @@
             margin-bottom: 10px;
             border-radius: 5px;
             border: 2px solid #dddddd;
+
           
         }
+        #navigation {
+            display: none;
+            width: 100%;
+            overflow: hidden;
+            top:0;
+        }
 
-        #Logon {
+            #navigation a {
+                text-align: center;
+                height: 13px;
+                transition: width 1.5s;
+                font-size: 20px;
+                font-weight: bold;
+                cursor: pointer;
+                background: #403022;
+                color: #1E91D9;
+                /*top: 0;*/
+                float:left;
+                padding:14px 16px;
+                text-decoration: none;
+                
+                width:10%;
+            }
+                #navigation a:hover {
+                    width: 300px;
+                    background: #BF9B7A;
+                }
+                
+        
+            #Logon {
         
             width: 320px;
             height: 420px;
@@ -212,15 +234,6 @@
                 color: #39dc79;
         }
 
-        /*.buttons {
-            background-color: #8C1D40;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            cursor: pointer;
-        }*/
-
         .logoImage {
             padding: 30px;
             background: rgba(0,0,0,0.25);
@@ -267,33 +280,50 @@
             padding-left:50px;
         }
 
-
+        a:visited {
+            color:aliceblue;
+        }
+        /*.transform a{
+            width: 25%;
+        }*/
 
 	</style>
 	<!--END OF YOUR OWN CSS-->
 </head >
 <body>
-	<!--<button onclick="javascript: TestButtonHandler();">Click here to test connection!</button>-->
-  
-    
+    <!--<button onclick="javascript: TestButtonHandler();">Click here to test connection!</button>-->
+
+
     <div id="Logon">
+<<<<<<< HEAD
         <a id="logoImage" title="Mentor/ Mentee Program Logo" ><img src="logo.png" class="avator"><br /></a>
         <a href="mentees.html">Mentees</a>
+=======
+        <a id="logoImage" title="Mentor/ Mentee Program Logo"><img src="logo.png" class="avator"><br /></a>
+>>>>>>> 5a3c700cbba876985cb35fcc273445ddf3c113e4
         <h1>Login Here</h1>
-            <form>
-                
-                <p>E-mail</p>
-                <input class="log" type="text" placeholder="Enter E-mail" id="email" required>
+        <form>
 
-                <p>Password</p>
-                <input class="log" type="password" placeholder="Enter Password" id="psw" required>
+            <p>E-mail</p>
+            <input class="log" type="text" placeholder="Enter E-mail" id="email" required>
 
-                <button id="LogIn" type="button" onclick="LogOn(getElementById('email').value, getElementById('psw').value)">Login</button>
-                <a href="newUser.html">Create Account</a>
-                
-                <a href="#" id="forgot">Forget Password</a>
+            <p>Password</p>
+            <input class="log" type="password" placeholder="Enter Password" id="psw" required>
+
+            <button id="LogIn" type="button" onclick="LogOn(getElementById('email').value, getElementById('psw').value)">Login</button>
+            <a href="newUser.html">Create Account</a>
+
+            <a href="#" id="forgot">Forgot Password</a>
         </form>
     </div>
-    <div id="homePage"></div>
+    <div id="navigation" class="transform">
+        <a href="#homePage">Home</a>
+        <a>My Mentor</a>
+        <a>My Profile</a>
+        <a>Contact</a>
+        <a href="mentees.html">Temp Mentee Page</a>
+    </div>
+    <div id="homePage">
+    </div>
 </body>
 </html >
