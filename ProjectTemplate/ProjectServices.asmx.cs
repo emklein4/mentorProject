@@ -75,13 +75,93 @@ namespace ProjectTemplate
                 }
 
             }*/
-        
-        [WebMethod]
-        public void CreateAccount(string fname, string lname, string email, string pass, string personality,
-            string dept, string role)
+
+        [WebMethod(EnableSession = true)] //NOTICE: gotta enable session on each individual method
+        public string LogOn(string uid, string pass)
         {
-            string sqlSelect = "insert into Staff (Lastname, Firstname, Email, password, Department, StaffTitle, Personality) " +
-                "values(@lastValue, @firstValue, @emailValue, @passValue, @deptValue, @roleValue, @personValue);";
+            //we return this flag to tell them if they logged in or not
+
+            //our connection string comes from our web.config file like we talked about earlier
+            //here's our query.  A basic select with nothing fancy.  Note the parameters that begin with @
+            //NOTICE: we added admin to what we pull, so that we can store it along with the id in the session
+            string sqlSelect = "SELECT StaffId, Admin FROM Staff WHERE Email=@emailValue and password=@passValue";
+
+            //set up our connection object to be ready to use our connection string
+            MySqlConnection con = new MySqlConnection(getConString());
+            //set up our command object to use our connection, and our query
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, con);
+
+            //tell our command to replace the @parameters with real values
+            //we decode them because they came to us via the web so they were encoded
+            //for transmission (funky characters escaped, mostly)
+            sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(uid));
+            sqlCommand.Parameters.AddWithValue("@passValue", HttpUtility.UrlDecode(pass));
+
+            //a data adapter acts like a bridge between our command object and 
+            //the data we are trying to get back and put in a table object
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            //here's the table we want to fill with the results from our query
+            DataTable sqlDt = new DataTable();
+            //here we go filling it!
+            sqlDa.Fill(sqlDt);
+            //check to see if any rows were returned.  If they were, it means it's 
+            //a legit account
+            
+            if (sqlDt.Rows.Count > 0)
+            {
+                //if we found an account, store the id and admin status in the session
+                //so we can check those values later on other method calls to see if they 
+                //are 1) logged in at all, and 2) and admin or not
+
+                string accountID = sqlDt.Rows[0]["StaffId"].ToString();
+                Session["Admin"] = sqlDt.Rows[0]["Admin"];
+                Session["StaffId"] = sqlDt.Rows[0]["StaffId"];
+                return accountID;
+
+            }
+          
+            return null;
+
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        public Staff LoadUser(string ID)
+        {
+
+            DataTable sqlDt = new DataTable("staff");
+            string sqlSelect = "select * " +
+                "from Staff " +
+                "where StaffId = @uidvalue";
+
+            MySqlConnection sqlConnection = new MySqlConnection(getConString());
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            sqlCommand.Parameters.AddWithValue("@uidvalue", HttpUtility.UrlDecode(ID));
+
+            //gonna use this to fill a data table
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            //filling the data table
+            sqlDa.Fill(sqlDt);
+            Staff activeUser = new Staff
+            {
+                id = ID,
+                fname = sqlDt.Rows[0]["FirstName"].ToString(),
+                lname = sqlDt.Rows[0]["LastName"].ToString(),
+                email = sqlDt.Rows[0]["Email"].ToString(),
+                pass = sqlDt.Rows[0]["password"].ToString(),
+            };
+            //convert the list of accounts to an array and return!
+            return activeUser;
+
+        }
+
+        [WebMethod]
+        public void CreateAccount(string fname, string lname, string email, string pass, string myer,
+            string dept, string role, string disc)
+        {
+            string sqlSelect = "insert into Staff (Lastname, Firstname, Email, password, Department, StaffTitle, myerBriggs, disc) " +
+                "values(@lastValue, @firstValue, @emailValue, @passValue, @deptValue, @roleValue, @myerValue, @discValue);";
 
             MySqlConnection sqlConnection = new MySqlConnection(getConString());
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -92,7 +172,9 @@ namespace ProjectTemplate
             sqlCommand.Parameters.AddWithValue("@passValue", HttpUtility.UrlDecode(pass));
             sqlCommand.Parameters.AddWithValue("@deptValue", HttpUtility.UrlDecode(dept));
             sqlCommand.Parameters.AddWithValue("@roleValue", HttpUtility.UrlDecode(role));
-            sqlCommand.Parameters.AddWithValue("@personValue", HttpUtility.UrlDecode(personality));
+            sqlCommand.Parameters.AddWithValue("@myerValue", HttpUtility.UrlDecode(myer));
+            sqlCommand.Parameters.AddWithValue("@discValue", HttpUtility.UrlDecode(disc));
+
 
             //this time, we're not using a data adapter to fill a data table.  We're just
             //opening the connection, telling our command to "executescalar" which says basically
