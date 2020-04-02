@@ -29,39 +29,6 @@
 			});
         }
 
-        function createNewAccount() {
-            let fname
-            let lname
-            let pass
-            let email
-            let dept
-            let role
-            let myer
-            let disc
-            let resume
-
-            var webMethod = "ProjectServices.asmx/CreateAccount";
-            var parameters = "{\"fname\":\"" + encodeURI(fname) + "\", \"lname\":\"" + encodeURI(lname) + "\","
-                + "\"pass\":\"" + encodeURI(pass) + "\", \"email\":\"" + encodeURI(email) + "\"," +
-                "\"dept\":\"" + encodeURI(dept) + "\", \"role\":\"" + encodeURI(role) + "\"," +
-                "\"myer\":\"" + encodeURI(myer) + "\"," + "\"disc\":\"" + encodeURI(disc) + "\"}";
-
-            //jQuery ajax method
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: parameters,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (msg) {
-                    alert("Account Created");
-                },
-                error: function (e) {
-                    alert("this code will only execute if javascript is unable to access the webservice");
-                }
-            });
-        }
-
         function LogOn(email, pass) {
             //the url of the webservice we will be talking to
             var webMethod = "ProjectServices.asmx/LogOn";
@@ -311,6 +278,7 @@
     
     <div id="Logon">
         <a id="logoImage" title="Mentor/ Mentee Program Logo" ><img src="logo.png" class="avator"><br /></a>
+        <a href="mentees.html">Mentees</a>
         <h1>Login Here</h1>
             <form>
                 

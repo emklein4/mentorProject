@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>List of Mentees</title>
+</head>
+<body onload="loadMentees()">
+    <script>
+        function loadMentees() {
+            var webMethod = "ProjectServices.asmx/LoadMentees";
+            var parameters = "{}";
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (mentees) {
+                    var availableMentees[] = mentees.d;
+                    console.log(availableMentees);
+                    var ul = document.createElement("ul");
+                    for (var i = 0; i < availableMentees.length; i++) {
+                        var li = ul.appendChild('li');
+                        
+                        li.innerHTML = '<h4>' + availableMentees[i].fname + ' ' + availableMentees[i].lname + '</h4>' + 
+                            '<p>' + availableMentees[i].dept + '--' + availableMentees[i].role + '</p>' +
+                            '<a href=#>See More</a>';
+                    }
+                    
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+
+
+    </script>
+</body>
+</html>

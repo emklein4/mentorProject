@@ -6,6 +6,10 @@ using System.Web.Services;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Web.Http;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace ProjectTemplate
 {
@@ -155,13 +159,26 @@ namespace ProjectTemplate
             return activeUser;
 
         }
+        [HttpGet][WebMethod]
+        public async Task<string> GetAsync(string uri)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return await reader.ReadToEndAsync();
+            }
+        }
 
         [WebMethod]
-        public void CreateAccount(string fname, string lname, string email, string pass, string myer,
+        public string CreateAccount(string fname, string lname, string email, string pass, string myer,
             string dept, string role, string disc)
         {
             string sqlSelect = "insert into Staff (Lastname, Firstname, Email, password, Department, StaffTitle, myerBriggs, disc) " +
-                "values(@lastValue, @firstValue, @emailValue, @passValue, @deptValue, @roleValue, @myerValue, @discValue);";
+                "values (@lastValue, @firstValue, @emailValue, @passValue, @deptValue, @roleValue, @myerValue, @discValue);";
 
             MySqlConnection sqlConnection = new MySqlConnection(getConString());
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -175,8 +192,8 @@ namespace ProjectTemplate
             sqlCommand.Parameters.AddWithValue("@myerValue", HttpUtility.UrlDecode(myer));
             sqlCommand.Parameters.AddWithValue("@discValue", HttpUtility.UrlDecode(disc));
 
-
-            //this time, we're not using a data adapter to fill a data table.  We're just
+            var response = GetAsync("https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=78d26vdxwlrqb7&redirect_uri=http%3A%2F%2Flocalhost%3A50287%2Findex.html&state=fooobar&scope=r_liteprofile%20r_emailaddress%20w_member_social");
+            //this time, we're not using a data adapter to fill a data table.  We're just                                                  %3A = :    %2F = /
             //opening the connection, telling our command to "executescalar" which says basically
             //execute the query and just hand me back the number the query returns (the ID, remember?).
             //don't forget to close the connection!
@@ -191,6 +208,43 @@ namespace ProjectTemplate
             {
             }
             sqlConnection.Close();
+            return response.ToString();
         }
-	}
+
+        [WebMethod(EnableSession = true)]
+        public Staff[] listMentees()
+        {
+
+            DataTable sqlDt = new DataTable("staff");
+            string sqlSelect = "select * from Staff where MentorId is null and Mentor=0;";
+
+            MySqlConnection sqlConnection = new MySqlConnection(getConString());
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+
+            //gonna use this to fill a data table
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            //filling the data table
+            sqlDa.Fill(sqlDt);
+            List<Staff> mentees = new List<Staff>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                mentees.Add(new Staff
+                {
+                    id = sqlDt.Rows[i]["FirstName"].ToString(),
+                    fname = sqlDt.Rows[i]["FirstName"].ToString(),
+                    lname = sqlDt.Rows[i]["LastName"].ToString(),
+                    email = sqlDt.Rows[i]["Email"].ToString(),
+                    pass = sqlDt.Rows[i]["password"].ToString(),
+                    department = sqlDt.Rows[i]["Department"].ToString(),
+                    role = sqlDt.Rows[i]["StaffTitle"].ToString(),
+                    mb = sqlDt.Rows[i]["myerBriggs"].ToString(),
+                    disc = sqlDt.Rows[i]["disc"].ToString()
+                });
+            };
+            //convert the list of accounts to an array and return!
+            return mentees.ToArray();
+
+        }
+    }
 }
