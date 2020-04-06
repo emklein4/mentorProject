@@ -7,63 +7,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
+
     <!--<script type="text/javascript">
         var activeID;
-
-        function TestButtonHandler() {
-            var webMethod = "ProjectServices.asmx/TestConnection";
-            var parameters = "{}";
-
-            //jQuery ajax method
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: parameters,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (msg) {
-                    var responseFromServer = msg.d;
-                    alert(responseFromServer);
-                },
-                error: function (e) {
-                    alert("this code will only execute if javascript is unable to access the webservice");
-                }
-            });
-        }
-
-        function createNewAccount() {
-            let fname
-            let lname
-            let pass
-            let email
-            let dept
-            let role
-            let myer
-            let disc
-            let resume
-
-            var webMethod = "ProjectServices.asmx/CreateAccount";
-            var parameters = "{\"fname\":\"" + encodeURI(fname) + "\", \"lname\":\"" + encodeURI(lname) + "\","
-                + "\"pass\":\"" + encodeURI(pass) + "\", \"email\":\"" + encodeURI(email) + "\"," +
-                "\"dept\":\"" + encodeURI(dept) + "\", \"role\":\"" + encodeURI(role) + "\"," +
-                "\"myer\":\"" + encodeURI(myer) + "\"," + "\"disc\":\"" + encodeURI(disc) + "\"}";
-
-            //jQuery ajax method
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: parameters,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (msg) {
-                    alert("Account Created");
-                },
-                error: function (e) {
-                    alert("this code will only execute if javascript is unable to access the webservice");
-                }
-            });
-        }
-
         function LogOn(email, pass) {
             //the url of the webservice we will be talking to
             var webMethod = "ProjectServices.asmx/LogOn";
@@ -93,12 +39,11 @@
                     if (id.d) {
                         //server replied true
                         activeID = id.d;
-                        console.log(activeID)
                         alert("Logged In!")
                         //var x = document.getElementById("buttonsID");
-                        //location.replace("homepage.html");
-                        LoadUser();
+                        location.replace("homepage.html");
                         //var y = document.getElementById("Logon");
+
                         //y.style.display = "none";
 
                     }
@@ -118,7 +63,6 @@
                 }
             });
         }
-
         function LoadUser() {
             var id = activeID;
             console.log(id);
@@ -134,28 +78,9 @@
                 dataType: "json",
                 success: function (id) {
                     var activeUser = id.d;
-                    console.log("Active User's first name", activeUser.fname);
-                    //location.replace("homepage.html");
-
-                    //if (window.location.href == "profile.html") {
-                    //    document.getElementById("email").innerHTML = activeUser.email;
-                    //}
-
-                    var x = document.getElementById("Logon");
-                    x.style.display = "none";
-                    var y = document.getElementById("NavigationBar");
-                    y.style.display = "block"
-                    var z = document.getElementByClass("iframe");
-                    z.style.display = "block"
-
-                    //var stmt = "<h1>" + activeUser.f_name + "'s Books</h1><table id = 'booktable'><tr><th></th> <th> Book</th> <th>Return Date</th>"
-                    //for (var i = 0; i < activeUser.books.length; i++) {
-                    //    stmt = stmt + "<tr><td class ='checkID'><input type='checkbox' class='returnSelection' value='" + activeUser.books[i].isbn + "'></td><td id ='bookId'>" + activeUser.books[i].title +
-                    //        "</td><td>" + activeUser.books[i].returndate.replace("12:00:00 AM", "") + "</td></tr>"
-                    //}
-                    //stmt = stmt + "</table>";
-                    //document.getElementById("rentedbooks").innerHTML = stmt;
-
+                    console.log("It works!", activeUser);
+                    //var stmt = activeUser.fname;
+                    //document.getElementById("homePage").innerHTML = stmt;
                 },
                 error: function (e) {
                     console.log(e.responseText);
@@ -164,15 +89,9 @@
             });
         }
 
-        function loadProfile() {
-            document.getElementById("email").innerHTML = activeID.email;
-
-        }
-
     </script>-->
-    <!--END OF YOUR OWN JAVASCRIPT-->
-    <!--AND YOUR OWN CSS CAN GO HERE AS WELL-->
     <style>
+        /* Split the screen in half */
         .split {
             height: 100%;
             width: 50%;
@@ -231,167 +150,6 @@
             border: 2px solid #dddddd;
         }
 
-        #Logon {
-            width: 320px;
-            height: 420px;
-            background: rgba(0,0,0,0.5);
-            color: #fff;
-            top: 55%;
-            left: 50%;
-            position: absolute;
-            transform: translate(-50%, -50%);
-            box-sizing: border-box;
-            padding: 70px 30px;
-        }
-
-            #Logon input {
-                width: 100%;
-                margin-bottom: 20px;
-            }
-
-                #Logon input[type="text"], input[type="password"] {
-                    border: none;
-                    border-bottom: 1px solid #fff;
-                    background: transparent;
-                    outline: none;
-                    height: 40px;
-                    color: #fff;
-                    font-size: 16px;
-                }
-
-            #Logon p {
-                margin: 0;
-                padding: 0;
-                font-weight: bold;
-            }
-
-            #Logon button {
-                border: none;
-                outline: none;
-                height: 40px;
-                background: #1c8adb;
-                color: #fff;
-                font-size: 18px;
-                border-radius: 20px;
-            }
-
-                #Logon button:hover {
-                    cursor: pointer;
-                    background: #39dc79;
-                    color: #000;
-                }
-
-            #Logon a {
-                text-decoration: none;
-                font-size: 14px;
-                color: #fff;
-            }
-
-                #Logon a:hover {
-                    color: #39dc79;
-                }
-
-        /*.buttons {
-            background-color: #8C1D40;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            cursor: pointer;
-        }*/
-
-        .logoImage {
-            padding: 30px;
-            background: rgba(0,0,0,0.25);
-            display: block;
-            max-width: 125px;
-            margin: 0;
-        }
-
-        .log {
-            padding: 12px 20px;
-            margin: 0 auto;
-            display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(0,0,0,0.15);
-            box-sizing: border-box;
-            width: 100%;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: 2px solid #dddddd;
-            background: #ffffff;
-            outline: none;
-            transition: border-color 0.5s;
-        }
-
-        .avator {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            position: absolute;
-            top: -50px;
-            left: calc(50% - 50px);
-        }
-
-        h1 {
-            margin: 0;
-            padding: 0 0 20px;
-            text-align: center;
-            font-size: 22px;
-        }
-
-        #forgot {
-            padding-left: 50px;
-        }
-
-
-        #iFrame {
-            margin: auto;
-            position: relative;
-            padding-top: 10%;
-            padding-left: 25%;
-        }
-
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        li a {
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-
-        #logoImage {
-            width: 50px;
-            height: 50px;
-            margin-top: -12%;
-        }
-
-        #Ment2BId {
-            font-family: "Georgia";
-            font-size: 30px;
-            float: left;
-            padding-top: 14px;
-            padding-left: 3%;
-        }
-
-            #Ment2BId:hover {
-                cursor: pointer;
-            }
-
-        .navBar {
-            float: right;
-            padding-top: 20px;
-            padding-right: 5px;
-            text-transform: uppercase;
-        }
         #Profile {
             width: 700px;
             height: 420px;
@@ -506,73 +264,94 @@
             left: calc(50% - 50px);
         }
 
+        h1 {
+            margin: 0;
+            padding: 0 0 20px;
+            text-align: center;
+            font-size: 22px;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        li a {
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        #logoImage {
+            width: 50px;
+            height: 50px;
+            margin-top: -12%;
+        }
+
+        #Ment2BId {
+            font-family: "Georgia";
+            font-size: 30px;
+            float: left;
+            padding-top: 14px;
+            padding-left: 3%;
+        }
+
+            #Ment2BId:hover {
+                cursor: pointer;
+            }
+
+        .navBar {
+            float: right;
+            padding-top: 20px;
+            padding-right: 5px;
+            text-transform: uppercase;
+        }
     </style>
     <!--END OF YOUR OWN CSS-->
-    <script src="./Script.js"></script>
 </head>
 <body>
     <!--<button onclick="javascript: TestButtonHandler();">Click here to test connection!</button>-->
-
-
-    <div id="Logon">
-        <a id="logoImage" title="Mentor/ Mentee Program Logo"><img src="logo.png" class="avator"><br /></a>
-        <h1>Login Here</h1>
-        <form>
-
-            <p>E-mail</p>
-            <input class="log" type="text" placeholder="Enter E-mail" id="email" required>
-
-            <p>Password</p>
-            <input class="log" type="password" placeholder="Enter Password" id="psw" required>
-
-            <button id="LogIn" type="button" onclick="LogOn(getElementById('email').value, getElementById('psw').value)">Login</button>
-            <a href="newUser.html">Create Account</a>
-
-            <a href="#" id="forgot">Forget Password</a>
-        </form>
-    </div>
-
-    <div id="NavigationBar" style="display: none">
+    <div id="NavigationBar">
         <ul>
-            <li id="Ment2BId" onclick="LoadUser()"><a href="#"><img src="logo.png" id="logoImage" align="middle">Ment2B</a></li>
+            <li id="Ment2BId"><a href="homepage.html"><img src="logo.png" id="logoImage" align="middle">Ment2B</a></li>
             <li class="navBar"><a href="index.html">Sign out</a></li>
-            <li class="navBar" onclick="loadProfile()"><a href="#">My Profile</a></li>
-            <li class="navBar" onclick="MenteeProfile()"><a href="#">My Mentee</a></li>
-            <li class="navBar" onclick="MentorProfile()"><a href="#">My Mentor</a></li>
+            <li class="navBar"><a href="profile.html">My Profile</a></li>
+            <li class="navBar"><a href="#">My Mentee</a></li>
+            <li class="navBar"><a href="#">My Mentor</a></li>
         </ul>
     </div>
-    <div id='iFrame' style="display: none">
-        <iframe src='https://calendar.google.com/calendar/embed?src=asu.edu_6p28703btj82p1fvo7o1ld8kv4%40group.calendar.google.com&ctz=America%2FPhoenix' style='border: 0' width='600' height='400' frameborder='0' scrolling='no'></iframe>;
-    </div>
-    <div id="Profile" style="display: none">
+    <div id="Profile">
         <a id="logoImage" title="Mentor/ Mentee Program Logo"><img src="logo.png" class="avator"><br /></a>
 
         <form>
             <div class="split left">
                 <div class="centered">
                     <p>First Name</p>
-                    <input class="log" type="text" placeholder="First Name" id="fname" required>
+                    <input class="log" type="text" placeholder="Enter First Name" id="fname" required>
 
                     <p>Last Name</p>
-                    <input class="log" type="text" placeholder="Last Name" id="lname" required>
+                    <input class="log" type="text" placeholder="Enter Last Name" id="lname" required>
 
                     <p>E-mail</p>
-                    <input class="log" type="text" placeholder="E-mail" id="Email" required>
+                    <input class="log" type="text" placeholder="Enter e-mail" id="email" required>
 
                     <p>Password</p>
-                    <input class="log" type="password" placeholder="Password" id="Psw" required>
+                    <input class="log" type="password" placeholder="Enter Password" id="psw" required>
 
                     <p>Department</p>
-                    <input class="log" type="text" placeholder="Department" id="dep" required>
+                    <input class="log" type="text" placeholder="Enter Department" id="dep" required>
                 </div>
             </div>
 
             <div class="split right">
                 <div class="centered">
                     <p>Role</p>
-                    <input class="log" type="text" placeholder="Role" id="role" required>
+                    <input class="log" type="text" placeholder="Enter Role" id="role" required>
 
-                    <p>Personality Results Below:</p>
+                    <p>Enter Personality Results Below:</p>
                     <br>
                     <p>
                         <a href="https://www.onlinepersonalitytests.org/mbti/" target="_blank">
@@ -618,4 +397,4 @@
         </form>
     </div>
 </body>
-</html >
+</html>
