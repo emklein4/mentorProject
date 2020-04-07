@@ -1,210 +1,14 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-
     <meta charset="utf-8" />
     <title></title>
     <!--DO NOT FORGET THIS SCRIPT TAG SO YOU CAN USE JQUERY!!!!!-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="./style.css" rel="stylesheet" type="text/css" />
     <script src="./Script.js"></script>
-    <link rel="stylesheet" type="text/css" href="./mentorStyle.css" />
-    <link href="./style.css" rel="stylesheet" type="text/css"/>
+</head>
 
-	<!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
-	<script type="text/javascript">
-		function TestButtonHandler() {
-			var webMethod = "ProjectServices.asmx/TestConnection";
-			var parameters = "{}";
-
-			//jQuery ajax method
-			$.ajax({
-				type: "POST",
-				url: webMethod,
-				data: parameters,
-				contentType: "application/json; charset=utf-8",
-				dataType: "json",
-				success: function (msg) {
-					var responseFromServer = msg.d;
-					alert(responseFromServer);
-				},
-				error: function (e) {
-					alert("this code will only execute if javascript is unable to access the webservice");
-				}
-			});
-        }
-
-        function LogOn(email, pass) {
-            //the url of the webservice we will be talking to
-            var webMethod = "ProjectServices.asmx/LogOn";
-            //the parameters we will pass the service (in json format because curly braces)
-            //note we encode the values for transmission over the web.  All the \'s are just
-            //because we want to wrap our keynames and values in double quotes so we have to
-            //escape the double quotes (because the overall string we're creating is in double quotes!)
-            var parameters = "{\"email\":\"" + encodeURI(email) + "\",\"pass\":\"" + encodeURI(pass) + "\"}";
-
-            //jQuery ajax method
-            $.ajax({
-                //post is more secure than get, and allows
-                //us to send big data if we want.  really just
-                //depends on the way the service you're talking to is set up, though
-                type: "POST",
-                //the url is set to the string we created above
-                url: webMethod,
-                //same with the data
-                data: parameters,
-                //these next two key/value pairs say we intend to talk in JSON format
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                //jQuery sends the data and asynchronously waits for a response.  when it
-                //gets a response, it calls the function mapped to the success key here
-                
-                success: function (id) {
-                    if (id.d) {
-                        //server replied true
-                        activeID = id.d;
-                        alert("Logged In!")
-                        //var x = document.getElementById("buttonsID");
-                        LoadUser();
-                        var y = document.getElementById("Logon");
-                        //x.style.display = "block";
-                        y.style.display = "none";
-
-                    }
-                    else {
-                        //server replied false, so let the user know
-                        //the logon failed
-                        alert("logon failed");
-                    }
-                },
-                error: function (e) {
-                    //if something goes wrong in the mechanics of delivering the
-                    //message to the server or the server processing that message,
-                    //then this function mapped to the error key is executed rather
-                    //than the one mapped to the success key.  This is just a garbage
-                    //alert because I'm lazy
-                    alert("boo...");
-                }
-            });
-        }
-
-        function LoadUser() {
-            var id = activeID;
-            console.log(id);
-            var webMethod = "ProjectServices.asmx/LoadUser";
-            var parameters = "{\"ID\":\"" + encodeURI(id) + "\"}";
-
-            //jQuery ajax method
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: parameters,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (id) {
-
-                    var activeUser = id.d;
-                    document.getElementById('NavigationBar').style.display = "block";
-                    var stmt = "<br><br><br><br>";
-                    stmt = stmt + "<iframe src= 'https://calendar.google.com/calendar/embed?src=asu.edu_6p28703btj82p1fvo7o1ld8kv4%40group.calendar.google.com&ctz=America%2FPhoenix' style='border: 0' width='900' height='600' frameborder='0' scrolling='no' align='middle' float='right'></iframe>"
-                    document.getElementById("homePage").innerHTML = stmt;
-                },
-                error: function (e) {
-                    console.log(e.responseText);
-                    alert("load user error");
-                }
-            });
-        }
-
-        function getSessionId() {
-            var webMethod = "ProjectServices.asmx/GetSessionId";
-            var parameters = "{}";
-
-            //jQuery ajax method
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: parameters,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (msg) {
-                    var responseFromServer = msg.d;
-                    alert(responseFromServer);
-                },
-                error: function (e) {
-                    alert("this code will only execute if javascript is unable to access the webservice");
-                }
-            });
-        }
-
-        function loadProfile() {
-            var id;
-            var webMethod = "ProjectServices.asmx/GetSessionId";
-            var parameters = "{}";
-
-            //jQuery ajax method
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: parameters,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (msg) {
-                    id = msg.d
-                },
-                error: function (e) {
-                    alert("this code will only execute if javascript is unable to access the webservice");
-                }
-            });
-
-            console.log(id);
-            var webMethod = "ProjectServices.asmx/LoadUser";
-            var parameters = "{\"ID\":\"" + encodeURI(id) + "\"}";
-
-            //jQuery ajax method
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: parameters,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (id) {
-                    activeUser = id.d;
-                    console.log("Active User's email", activeUser.email);
-
-                    var a = document.getElementById("Logon");
-                    a.style.display = "none";
-                    var b = document.getElementById("NavigationBar");
-                    b.style.display = "block";
-                    var c = document.getElementById("homePage");
-                    c.style.display = "none";
-                    var d = document.getElementById("Profile");
-                    d.style.display = "block";
-
-                    document.getElementById("fname").value = activeUser.fname;
-                    document.getElementById("lname").value = activeUser.lname;
-                    document.getElementById("userEmail").value = activeUser.email;
-                    document.getElementById("userPsw").value = activeUser.pass;
-                    document.getElementById("dep").value = activeUser.department;
-                    document.getElementById("role").value = activeUser.role;
-                    document.getElementById("myers").value = activeUser.mb;
-                    document.getElementById("disc").value = activeUser.disc;
-
-
-                },
-                error: function (e) {
-                    console.log(e.responseText);
-                    alert("load user error");
-                }
-            });
-        }
-
-	</script>
-	<!--END OF YOUR OWN JAVASCRIPT-->
-
-	<!--AND YOUR OWN CSS CAN GO HERE AS WELL-->
-      
-	<!--END OF YOUR OWN CSS-->
-</head >
 <body>
     <div id="Logon">
         <a id="logoImage" title="Mentor/ Mentee Program Logo"><img src="logo.png" class="avator"><br /></a>
@@ -230,84 +34,87 @@
             <li class="navBar"><a href="index.html">Sign out</a></li>
             <li class="navBar"><a href="mentees.html">Connect</a></li>
             <li class="navBar" onclick="loadProfile()"><a href="#">My Profile</a></li>
-            <li class="navBar" onclick="MenteeProfile()"><a href="profile.html">My Mentee</a></li>
-            <li class="navBar" onclick="MentorProfile()"><a href="profile.html">My Mentor</a></li>
+            <li class="navBar" onclick="MenteeProfile()"><a href="#">My Mentee</a></li>
+            <li class="navBar" onclick="MentorProfile()"><a href="#">My Mentor</a></li>
         </ul>
     </div>
-    <div id="homePage">
 
-    </div>
-    <div id="Profile" style="display: none">
-        <a id="logoImage" title="Mentor/ Mentee Program Logo"><img src="logo.png" class="avator"><br /></a>
+        <div id='iFrame' style="display: none">
+            <iframe src='https://calendar.google.com/calendar/embed?src=asu.edu_6p28703btj82p1fvo7o1ld8kv4%40group.calendar.google.com&ctz=America%2FPhoenix' style='border: 0' width='600' height='400' frameborder='0' scrolling='no'></iframe>;
+        </div>
 
-        <form>
-            <div class="split left">
-                <div class="centered">
-                    <p>First Name</p>
-                    <input class="log" type="text" placeholder="Enter First Name" id="fname" required>
+        <div id="Profile" style="display: none">
+            <a id="logoImage" title="Mentor/ Mentee Program Logo"><img src="logo.png" class="avator"><br /></a>
 
-                    <p>Last Name</p>
-                    <input class="log" type="text" placeholder="Enter Last Name" id="lname" required>
+            <form>
+                <div class="split left">
+                    <div class="centered">
+                        <p>First Name</p>
+                        <input class="log" type="text" placeholder="First Name" id="fname" required>
 
-                    <p>E-mail</p>
-                    <input class="log" type="text" placeholder="Enter e-mail" id="userEmail" required>
+                        <p>Last Name</p>
+                        <input class="log" type="text" placeholder="Last Name" id="lname" required>
 
-                    <p>Password</p>
-                    <input class="log" type="password" placeholder="Enter Password" id="userPsw" required>
+                        <p>E-mail</p>
+                        <input class="log" type="text" placeholder="E-mail" id="Email" required>
 
-                    <p>Department</p>
-                    <input class="log" type="text" placeholder="Enter Department" id="dep" required>
+                        <p>Password</p>
+                        <input class="log" type="password" placeholder="Password" id="Psw" required>
+
+                        <p>Department</p>
+                        <input class="log" type="text" placeholder="Department" id="dep" required>
+                    </div>
                 </div>
-            </div>
 
-            <div class="split right">
-                <div class="centered">
-                    <p>Role</p>
-                    <input class="log" type="text" placeholder="Enter Role" id="role" required>
+                <div class="split right">
+                    <div class="centered">
+                        <p>Role</p>
+                        <input class="log" type="text" placeholder="Role" id="role" required>
 
-                    <p>Enter Personality Results Below:</p>
-                    <br>
-                    <p>
-                        <a href="https://www.onlinepersonalitytests.org/mbti/" target="_blank">
-                            Take Myers Briggs personality Test Here
-                        </a>
-                    </p>
-                    <select id="myer">
-                        <option value="ISTJ">ISTJ</option>
-                        <option value="ISTP">ISTP</option>
-                        <option value="ESTP">ESTP</option>
-                        <option value="ESTJ">ESTJ</option>
-                        <option value="ISFJ">ISFJ</option>
-                        <option value="ISFP">ISFP</option>
-                        <option value="ESFP">ESFP</option>
-                        <option value="ESFJ">ESFJ</option>
-                        <option value="INFJ">INFJ</option>
-                        <option value="INFP">INFP</option>
-                        <option value="ENFP">ENFP</option>
-                        <option value="ENTJ">ENFJ</option>
-                        <option value="INTJ">INTJ</option>
-                        <option value="INTP">INTP</option>
-                        <option value="ENTP">ENTP</option>
-                        <option value="ENTJ">ENTJ</option>
-                    </select>
+                        <p>Personality Results Below:</p>
+                        <br>
+                        <p>
+                            <a href="https://www.onlinepersonalitytests.org/mbti/" target="_blank">
+                                Take Myers Briggs personality Test Here
+                            </a>
+                        </p>
+                        <select id="myers">
+                            <option value="ISTJ">ISTJ</option>
+                            <option value="ISTP">ISTP</option>
+                            <option value="ESTP">ESTP</option>
+                            <option value="ESTJ">ESTJ</option>
+                            <option value="ISFJ">ISFJ</option>
+                            <option value="ISFP">ISFP</option>
+                            <option value="ESFP">ESFP</option>
+                            <option value="ESFJ">ESFJ</option>
+                            <option value="INFJ">INFJ</option>
+                            <option value="INFP">INFP</option>
+                            <option value="ENFP">ENFP</option>
+                            <option value="ENFJ">ENFJ</option>
+                            <option value="INTJ">INTJ</option>
+                            <option value="INTP">INTP</option>
+                            <option value="ENTP">ENTP</option>
+                            <option value="INTJ">ENTJ</option>
+                        </select>
 
-                    <p><a href="https://www.123test.com/disc-personality-test/" target="_blank">Take Disc Personality Test Here</a></p>
-                    <select id="disc">
-                        <option value="D">D</option>
-                        <option value="I">I</option>
-                        <option value="S">S</option>
-                        <option value="C">C</option>
-                    </select>
+                        <p><a href="https://www.123test.com/disc-personality-test/" target="_blank">Take Disc Personality Test Here</a></p>
+                        <select id="disc">
+                            <option value="D">D</option>
+                            <option value="I">I</option>
+                            <option value="S">S</option>
+                            <option value="C">C</option>
+                        </select>
 
-                    <p>Upload Resume</p>
-                    <input type="file" id="fileUpload">
+                        <p>Upload Resume</p>
+                        <input type="file" id="fileUpload">
 
+                    </div>
                 </div>
-            </div>
 
 
-            <button id="create" type="button" onclick="createNewAccount()">Update Account</button>
+                <button id="create" type="button" onclick="createNewAccount()">Create Account</button>
+
             </form>
         </div>
 </body>
-</html >
+</html>

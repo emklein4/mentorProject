@@ -18,8 +18,8 @@ namespace ProjectTemplate
     [System.ComponentModel.ToolboxItem(false)]
     [System.Web.Script.Services.ScriptService]
 
-    public class ProjectServices : System.Web.Services.WebService
-    {
+	public class ProjectServices : System.Web.Services.WebService
+	{
 
         public string sessionID;
         ////////////////////////////////////////////////////////////////////////
@@ -33,6 +33,7 @@ namespace ProjectTemplate
         ////////////////////////////////////////////////////////////////////////
         ///call this method anywhere that you need the connection string!
         ////////////////////////////////////////////////////////////////////////
+
         private string getConString()
         {
             return "SERVER=107.180.1.16; PORT=3306; DATABASE=" + dbName + "; UID=" + dbID + "; PASSWORD=" + dbPass;
@@ -67,10 +68,7 @@ namespace ProjectTemplate
             }
         }
 
-		////////////////////////////////////////////////////////////////////////
-		/////////////////////////////////////////////////////////////////////////
-		//don't forget to include this decoration above each method that you want
-		//to be exposed as a web service!
+        
 
         [WebMethod(EnableSession = true)]
         public string GetSessionId()
@@ -144,7 +142,7 @@ namespace ProjectTemplate
 
 
         [WebMethod(EnableSession = true)]
-        public Staff LoadUser()
+        public Staff LoadUser(string ID)
         {
 
             DataTable sqlDt = new DataTable("staff");
@@ -155,7 +153,7 @@ namespace ProjectTemplate
             MySqlConnection sqlConnection = new MySqlConnection(getConString());
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
 
-            sqlCommand.Parameters.AddWithValue("@uidvalue", GetSessionId());
+            sqlCommand.Parameters.AddWithValue("@uidvalue", HttpUtility.UrlDecode(ID));
 
             //gonna use this to fill a data table
             MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
@@ -163,13 +161,13 @@ namespace ProjectTemplate
             sqlDa.Fill(sqlDt);
             Staff activeUser = new Staff
             {
-                id = GetSessionId(),
+                id = ID,
                 fname = sqlDt.Rows[0]["FirstName"].ToString(),
                 lname = sqlDt.Rows[0]["LastName"].ToString(),
                 email = sqlDt.Rows[0]["Email"].ToString(),
                 pass = sqlDt.Rows[0]["password"].ToString(),
                 department = sqlDt.Rows[0]["Department"].ToString(),
-                role = sqlDt.Rows[0]["StaffTitle"].ToString(),
+                role = sqlDt.Rows[0]["Department"].ToString(),
                 mb = sqlDt.Rows[0]["myerBriggs"].ToString(),
                 disc = sqlDt.Rows[0]["disc"].ToString()
             };
@@ -177,7 +175,8 @@ namespace ProjectTemplate
             return activeUser;
 
         }
-        [HttpGet][WebMethod]
+        [HttpGet]
+        [WebMethod]
         public async Task<string> GetAsync(string uri)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
@@ -229,7 +228,7 @@ namespace ProjectTemplate
 
             DataTable sqlDt = new DataTable("staff");
             string sqlSelect = "SELECT B.* FROM codeagainsthumanity.Staff AS A LEFT OUTER JOIN codeagainsthumanity.Staff AS B ON A.StaffID = B.MentorID where A.StaffID = @uidvalue;";
-            
+
             MySqlConnection sqlConnection = new MySqlConnection(getConString());
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
 
@@ -257,21 +256,6 @@ namespace ProjectTemplate
         }
 
         
-        /*[WebMethod][HttpGet]
-        public async Task<string> GetAsync(string uri)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return await reader.ReadToEndAsync();
-            }
-        } */
-
-        [WebMethod]
         public string CreateAccount(string fname, string lname, string email, string pass, string myer,
             string dept, string role, string disc)
         {
@@ -329,7 +313,7 @@ namespace ProjectTemplate
             {
                 mentees.Add(new Staff
                 {
-                    id = sqlDt.Rows[i]["StaffId"].ToString(),
+                    id = sqlDt.Rows[i]["FirstName"].ToString(),
                     fname = sqlDt.Rows[i]["FirstName"].ToString(),
                     lname = sqlDt.Rows[i]["LastName"].ToString(),
                     email = sqlDt.Rows[i]["Email"].ToString(),
@@ -344,7 +328,7 @@ namespace ProjectTemplate
             return mentees.ToArray();
 
         }
-
+        
         [WebMethod(EnableSession = true)]
         public void ConnectMentee(string menteeId)
         {
@@ -376,4 +360,3 @@ namespace ProjectTemplate
         }
     }
 }
-

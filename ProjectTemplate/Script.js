@@ -146,25 +146,7 @@ function LoadUser() {
 }
 
 function loadProfile() {
-    var id;
-    var webMethod = "ProjectServices.asmx/GetSessionId";
-    var parameters = "{}";
-
-    //jQuery ajax method
-    $.ajax({
-        type: "POST",
-        url: webMethod,
-        data: parameters,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (msg) {
-            id = msg.d
-        },
-        error: function (e) {
-            alert("this code will only execute if javascript is unable to access the webservice");
-        }
-    });
-
+    var id = activeID;
     console.log(id);
     var webMethod = "ProjectServices.asmx/LoadUser";
     var parameters = "{\"ID\":\"" + encodeURI(id) + "\"}";
@@ -176,7 +158,7 @@ function loadProfile() {
         data: parameters,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function (user) {
+        success: function (id) {
             activeUser = id.d;
             console.log("Active User's email", activeUser.email);
 
@@ -197,7 +179,7 @@ function loadProfile() {
             document.getElementById("role").value = activeUser.role;
             document.getElementById("myers").value = activeUser.mb;
             document.getElementById("disc").value = activeUser.disc;
-            
+
 
         },
         error: function (e) {
@@ -206,6 +188,7 @@ function loadProfile() {
         }
     });
 }
+
 
 function MentorProfile() {
     var id = activeID;
