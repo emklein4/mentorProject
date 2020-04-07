@@ -178,11 +178,8 @@ a:visited {
     background-color: white;
     padding-top: 4px;
     border: 2px solid cornflowerblue;
-<<<<<<< HEAD
 }
-=======
-} 
->>>>>>> 4c4066e22d8ca6fbbe7b3fc1417dee8a3e97a6e6
+
 
 .mentee {
     display: block;
@@ -195,8 +192,4 @@ a:visited {
     height: 90vh;
     float: left;
     display: none;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 4c4066e22d8ca6fbbe7b3fc1417dee8a3e97a6e6

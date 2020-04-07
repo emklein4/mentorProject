@@ -1,15 +1,13 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<<<<<<< HEAD
+
     <meta charset="utf-8" />
     <title></title>
     <!--DO NOT FORGET THIS SCRIPT TAG SO YOU CAN USE JQUERY!!!!!-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="./style.css" rel="stylesheet" type="text/css"/>   
     <script src="./Script.js"></script>
-</head>
-=======
 	<meta charset="utf-8" />
 	<title></title>
     <link rel="stylesheet" type="text/css" href="./mentorStyle.css" />
@@ -110,7 +108,7 @@
                 success: function (id) {
 
                     var activeUser = id.d;
-                    document.getElementById('navigation').style.display = "block";
+                    document.getElementById('NavigationBar').style.display = "block";
                     var stmt = "<br><br><br><br>";
                     stmt = stmt + "<iframe src= 'https://calendar.google.com/calendar/embed?src=asu.edu_6p28703btj82p1fvo7o1ld8kv4%40group.calendar.google.com&ctz=America%2FPhoenix' style='border: 0' width='900' height='600' frameborder='0' scrolling='no' align='middle' float='right'></iframe>"
                     document.getElementById("homePage").innerHTML = stmt;
@@ -129,7 +127,6 @@
       
 	<!--END OF YOUR OWN CSS-->
 </head >
->>>>>>> 4c4066e22d8ca6fbbe7b3fc1417dee8a3e97a6e6
 <body>
     <div id="Logon">
         <a id="logoImage" title="Mentor/ Mentee Program Logo" ><img src="logo.png" class="avator"><br /></a>
@@ -148,7 +145,6 @@
             <a href="#" id="forgot">Forgot Password</a>
         </form>
     </div>
-<<<<<<< HEAD
 
     <div id="NavigationBar" style="display: none">
         <ul>
@@ -159,92 +155,6 @@
             <li class="navBar" onclick="MenteeProfile()"><a href="#">My Mentee</a></li>
             <li class="navBar" onclick="MentorProfile()"><a href="#">My Mentor</a></li>
         </ul>
-=======
-    <div id="navigation" class="transform">
-        <a href="#homePage">Home</a>
-        <a>My Mentor</a>
-        <a>My Profile</a>
-        <a>Contact</a>
-        <a href="mentees.html">Temp Mentee Page</a>
->>>>>>> 4c4066e22d8ca6fbbe7b3fc1417dee8a3e97a6e6
-    </div>
-
-    <div id='iFrame' style="display: none">
-        <iframe src='https://calendar.google.com/calendar/embed?src=asu.edu_6p28703btj82p1fvo7o1ld8kv4%40group.calendar.google.com&ctz=America%2FPhoenix' style='border: 0' width='600' height='400' frameborder='0' scrolling='no'></iframe>;
-    </div>
-
-    <div id="Profile" style="display: none">
-        <a id="logoImage" title="Mentor/ Mentee Program Logo"><img src="logo.png" class="avator"><br /></a>
-
-        <form>
-            <div class="split left">
-                <div class="centered">
-                    <p>First Name</p>
-                    <input class="log" type="text" placeholder="First Name" id="fname" required>
-
-                    <p>Last Name</p>
-                    <input class="log" type="text" placeholder="Last Name" id="lname" required>
-
-                    <p>E-mail</p>
-                    <input class="log" type="text" placeholder="E-mail" id="Email" required>
-
-                    <p>Password</p>
-                    <input class="log" type="password" placeholder="Password" id="Psw" required>
-
-                    <p>Department</p>
-                    <input class="log" type="text" placeholder="Department" id="dep" required>
-                </div>
-            </div>
-
-            <div class="split right">
-                <div class="centered">
-                    <p>Role</p>
-                    <input class="log" type="text" placeholder="Role" id="role" required>
-
-                    <p>Personality Results Below:</p>
-                    <br>
-                    <p>
-                        <a href="https://www.onlinepersonalitytests.org/mbti/" target="_blank">
-                            Take Myers Briggs personality Test Here
-                        </a>
-                    </p>
-                    <select id="myers">
-                        <option value="1">ISTJ</option>
-                        <option value="2">ISTP</option>
-                        <option value="3">ESTP</option>
-                        <option value="4">ESTJ</option>
-                        <option value="5">ISFJ</option>
-                        <option value="6">ISFP</option>
-                        <option value="7">ESFP</option>
-                        <option value="8">ESFJ</option>
-                        <option value="9">INFJ</option>
-                        <option value="10">INFP</option>
-                        <option value="11">ENFP</option>
-                        <option value="12">ENFJ</option>
-                        <option value="13">INTJ</option>
-                        <option value="14">INTP</option>
-                        <option value="15">ENTP</option>
-                        <option value="16">ENTJ</option>
-                    </select>
-
-                    <p><a href="https://www.123test.com/disc-personality-test/" target="_blank">Take Disc Personality Test Here</a></p>
-                    <select id="disc">
-                        <option value="1">D</option>
-                        <option value="2">I</option>
-                        <option value="3">S</option>
-                        <option value="4">C</option>
-                    </select>
-
-                    <p>Upload Resume</p>
-                    <input type="file" id="fileUpload">
-
-                </div>
-            </div>
-
-
-            <button id="create" type="button" onclick="createNewAccount()">Create Account</button>
-
-        </form>
     </div>
 </body>
 </html >
