@@ -18,8 +18,13 @@ namespace ProjectTemplate
     [System.ComponentModel.ToolboxItem(false)]
     [System.Web.Script.Services.ScriptService]
 
+<<<<<<< HEAD
     public class ProjectServices : System.Web.Services.WebService
     {
+=======
+	public class ProjectServices : System.Web.Services.WebService
+	{
+>>>>>>> 4c4066e22d8ca6fbbe7b3fc1417dee8a3e97a6e6
 
         public string sessionID;
         ////////////////////////////////////////////////////////////////////////
@@ -33,6 +38,7 @@ namespace ProjectTemplate
         ////////////////////////////////////////////////////////////////////////
         ///call this method anywhere that you need the connection string!
         ////////////////////////////////////////////////////////////////////////
+<<<<<<< HEAD
         private string getConString()
         {
             return "SERVER=107.180.1.16; PORT=3306; DATABASE=" + dbName + "; UID=" + dbID + "; PASSWORD=" + dbPass;
@@ -66,6 +72,40 @@ namespace ProjectTemplate
                 return "Something went wrong, please check your credentials and db name and try again.  Error: " + e.Message;
             }
         }
+=======
+        private string getConString() {
+			return "SERVER=107.180.1.16; PORT=3306; DATABASE=" + dbName+"; UID=" + dbID + "; PASSWORD=" + dbPass;
+		}
+		////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////
+		//don't forget to include this decoration above each method that you want
+		//to be exposed as a web service!
+		[WebMethod(EnableSession = true)]
+		/////////////////////////////////////////////////////////////////////////
+		public string TestConnection()
+		{
+			try
+			{
+				string testQuery = "select * from test";
+
+				////////////////////////////////////////////////////////////////////////
+				///here's an example of using the getConString method!
+				////////////////////////////////////////////////////////////////////////
+				MySqlConnection con = new MySqlConnection(getConString());
+				////////////////////////////////////////////////////////////////////////
+
+				MySqlCommand cmd = new MySqlCommand(testQuery, con);
+				MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+				DataTable table = new DataTable();
+				adapter.Fill(table);
+				return "Success!";
+			}
+			catch (Exception e)
+			{
+				return "Something went wrong, please check your credentials and db name and try again.  Error: "+e.Message;
+			}
+		}
+>>>>>>> 4c4066e22d8ca6fbbe7b3fc1417dee8a3e97a6e6
 
         [WebMethod(EnableSession = true)]
         public string GetSessionId()
@@ -172,6 +212,19 @@ namespace ProjectTemplate
             return activeUser;
 
         }
+        [HttpGet][WebMethod]
+        public async Task<string> GetAsync(string uri)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return await reader.ReadToEndAsync();
+            }
+        }
 
         [WebMethod(EnableSession = true)]
         public Staff LoadMentor(string ID)
@@ -240,6 +293,7 @@ namespace ProjectTemplate
 
         [HttpGet]
         [WebMethod]
+<<<<<<< HEAD
         public async Task<string> GetAsync(string uri)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
@@ -254,6 +308,8 @@ namespace ProjectTemplate
         }
 
         [WebMethod]
+=======
+>>>>>>> 4c4066e22d8ca6fbbe7b3fc1417dee8a3e97a6e6
         public string CreateAccount(string fname, string lname, string email, string pass, string myer,
             string dept, string role, string disc)
         {
@@ -327,7 +383,11 @@ namespace ProjectTemplate
 
         }
 
+<<<<<<< HEAD
         [WebMethod(EnableSession = true)]
+=======
+        [WebMethod(EnableSession = true)] 
+>>>>>>> 4c4066e22d8ca6fbbe7b3fc1417dee8a3e97a6e6
         public void ConnectMentee(string menteeId)
         {
             string sqlSelect = "update Staff set MentorId=@mentorValue where StaffId=@menteeValue;";
@@ -357,4 +417,8 @@ namespace ProjectTemplate
             con.Close();
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4c4066e22d8ca6fbbe7b3fc1417dee8a3e97a6e6

@@ -230,7 +230,7 @@
                             Take Myers Briggs personality Test Here
                         </a>
                     </p>
-                    <select>
+                    <select id="myer">
                         <option value="1">ISTJ</option>
                         <option value="2">ISTP</option>
                         <option value="3">ESTP</option>
@@ -250,7 +250,7 @@
                     </select>
 
                     <p><a href="https://www.123test.com/disc-personality-test/" target="_blank">Take Disc Personality Test Here</a></p>
-                    <select>
+                    <select id="disc">
                         <option value="1">D</option>
                         <option value="2">I</option>
                         <option value="3">S</option>
@@ -303,14 +303,15 @@
             let email = document.getElementById("email").value;
             let dept = document.getElementById("dep").value;
             let role = document.getElementById("role").value;
-            let personality = document.getElementById("fname").value;
-            let resume
+            let myer = document.getElementById("myer").value;
+            let disc = document.getElementById('disc').value;
 
             var webMethod = "ProjectServices.asmx/CreateAccount";
             var parameters = "{\"fname\":\"" + encodeURI(fname) + "\", \"lname\":\"" + encodeURI(lname) + "\","
                 + "\"pass\":\"" + encodeURI(pass) + "\", \"email\":\"" + encodeURI(email) + "\"," +
                 "\"dept\":\"" + encodeURI(dept) + "\", \"role\":\"" + encodeURI(role) + "\"," +
-                "\"personality\":\"" + encodeURI(personality) + "\"}";
+                " \"myer\":\"" + encodeURI(myer) + "\"," + " \"disc\":\"" + encodeURI(disc) + "\"}";
+
 
             //jQuery ajax method
             $.ajax({
@@ -321,9 +322,11 @@
                 dataType: "json",
                 success: function (msg) {
                     alert("Account Created");
+                    console.log(msg.d);
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");
+                    e.responseText;
                 }
             });
         }
