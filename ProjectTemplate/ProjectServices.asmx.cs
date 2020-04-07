@@ -144,7 +144,7 @@ namespace ProjectTemplate
 
 
         [WebMethod(EnableSession = true)]
-        public Staff LoadUser(string ID)
+        public Staff LoadUser()
         {
 
             DataTable sqlDt = new DataTable("staff");
@@ -155,7 +155,7 @@ namespace ProjectTemplate
             MySqlConnection sqlConnection = new MySqlConnection(getConString());
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
 
-            sqlCommand.Parameters.AddWithValue("@uidvalue", HttpUtility.UrlDecode(ID));
+            sqlCommand.Parameters.AddWithValue("@uidvalue", GetSessionId());
 
             //gonna use this to fill a data table
             MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
@@ -163,14 +163,14 @@ namespace ProjectTemplate
             sqlDa.Fill(sqlDt);
             Staff activeUser = new Staff
             {
-                id = ID,
+                id = GetSessionId(),
                 fname = sqlDt.Rows[0]["FirstName"].ToString(),
                 lname = sqlDt.Rows[0]["LastName"].ToString(),
                 email = sqlDt.Rows[0]["Email"].ToString(),
                 pass = sqlDt.Rows[0]["password"].ToString(),
                 department = sqlDt.Rows[0]["Department"].ToString(),
-                role = sqlDt.Rows[0]["Department"].ToString(),
-                mb = sqlDt.Rows[0]["StaffTitle"].ToString(),
+                role = sqlDt.Rows[0]["StaffTitle"].ToString(),
+                mb = sqlDt.Rows[0]["myerBriggs"].ToString(),
                 disc = sqlDt.Rows[0]["disc"].ToString()
             };
             //convert the list of accounts to an array and return!

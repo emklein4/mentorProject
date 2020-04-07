@@ -6,14 +6,18 @@
     <title>List of Mentees</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="./mentorStyle.css" rel="stylesheet" type="text/css" />
+    <link href="./style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body onload="loadMentees()">
-    <div id="navigation" class="transform" style="display: block">
-        <a href="#homePage">Home</a>
-        <a>My Mentor</a>
-        <a>My Profile</a>
-        <a>Contact</a>
-        <a href="mentees.html">Temp Mentee Page</a>
+    <div id="NavigationBar">
+        <ul>
+            <li id="Ment2BId" onclick="LoadUser()"><a href="#"><img src="logo.png" id="logoImage" align="middle">Ment2B</a></li>
+            <li class="navBar"><a href="index.html">Sign out</a></li>
+            <li class="navBar"><a href="mentees.html">Connect</a></li>
+            <li class="navBar" onclick="loadProfile()"><a href="#">My Profile</a></li>
+            <li class="navBar" onclick="MenteeProfile()"><a href="profile.html">My Mentee</a></li>
+            <li class="navBar" onclick="MentorProfile()"><a href="profile.html">My Mentor</a></li>
+        </ul>
     </div>
     <div id="menteeDiv">
         <ul id="mentees"></ul>

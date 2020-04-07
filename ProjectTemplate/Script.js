@@ -146,7 +146,25 @@ function LoadUser() {
 }
 
 function loadProfile() {
-    var id = activeID;
+    var id;
+    var webMethod = "ProjectServices.asmx/GetSessionId";
+    var parameters = "{}";
+
+    //jQuery ajax method
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {
+            id = msg.d
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+        }
+    });
+
     console.log(id);
     var webMethod = "ProjectServices.asmx/LoadUser";
     var parameters = "{\"ID\":\"" + encodeURI(id) + "\"}";
@@ -158,7 +176,7 @@ function loadProfile() {
         data: parameters,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function (id) {
+        success: function (user) {
             activeUser = id.d;
             console.log("Active User's email", activeUser.email);
 
@@ -278,81 +296,4 @@ function MenteeProfile() {
             alert("load user error");
         }
     });
-
-     var availableMentees;
-
-        function loadMentees() {
-            var webMethod = "ProjectServices.asmx/ListMentees";
-            var parameters = "{}";
-
-            //jQuery ajax method
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: parameters,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (mentees) {
-                    availableMentees = mentees.d;
-                    var ul = document.getElementById('mentees');
-                    for (var i = 0; i < availableMentees.length; i++) {
-                        var li = document.createElement('li');
-                        li.className = "mentee";
-                        li.addEventListener('click', function () { return fullMentee(i) });
-
-                        li.innerHTML = '<h4 onclick=fullMentee(' + i + ')>' + availableMentees[i].fname + ' ' + availableMentees[i].lname + '</h4>' +
-                            '<p>' + availableMentees[i].department + '--' + availableMentees[i].role + '</p>';
-                        ul.appendChild(li);
-                    }
-
-                },
-                error: function (e) {
-                    alert("this code will only execute if javascript is unable to access the webservice");
-                    console.log(e.responseText);
-                }
-            });
-        }
-
-        function connectMentee(id) {
-            var webMethod = "ProjectServices.asmx/ConnectMentee";
-            var parameters = "{\"menteeId\":\"" + encodeURI(id) + "\"}";
-
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: parameters,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function () {
-                    alert("found and ran webmethod");
-                },
-                error: function (e) {
-                    alert("this code will only execute if javascript is unable to access the webservice");
-                    console.log(e.responseText);
-                }
-            });
-        }
-
-        function fullMentee(index) {
-            div = document.getElementById('fullMentee');
-            div.style.display = 'block';
-
-            name = document.getElementById('fullname');
-            job = document.getElementById('job');
-            mb = document.getElementById('mb');
-            disc = document.getElementById('disc');
-            email = document.getElementById('email');
-
-            console.log(availableMentees[index]);
-
-            name.innerHTML = availableMentees[index].fname + ' ' + availableMentees[index].lname;
-            job.innerHTML = availableMentees[index].department + ' - ' + availableMentees[index].role;
-            mb.innerHTML = availableMentees[index].mb;
-            disc.innerHTML = availableMentees[index].disc;
-            email.innerHTML = availableMentees[index].email;
-            email.href = 'mailto:' + availableMentees[index].email;
-
-            button = document.getElementById('connect');
-            button.onclick = function () {return connectMentee(availableMentees[index].id)};
-        }
 }
