@@ -20,6 +20,8 @@ namespace ProjectTemplate
 
 	public class ProjectServices : System.Web.Services.WebService
 	{
+
+        public string sessionID;
         ////////////////////////////////////////////////////////////////////////
         ///replace the values of these variables with your database credentials
         ////////////////////////////////////////////////////////////////////////
@@ -63,6 +65,12 @@ namespace ProjectTemplate
 				return "Something went wrong, please check your credentials and db name and try again.  Error: "+e.Message;
 			}
 		}
+
+        [WebMethod(EnableSession = true)]
+        public string GetSessionId()
+        {
+            return Session["StaffId"].ToString();
+        }
         /*[WebMethod]
         public void ProcessRequest(HttpContext context)
             {
@@ -119,7 +127,8 @@ namespace ProjectTemplate
 
                 string accountID = sqlDt.Rows[0]["StaffId"].ToString();
                 Session["Admin"] = sqlDt.Rows[0]["Admin"];
-                Session["StaffId"] = sqlDt.Rows[0]["StaffId"];
+                Session["StaffId"] = sqlDt.Rows[0]["StaffId"].ToString();
+                sessionID = sqlDt.Rows[0]["StaffId"].ToString();
                 return accountID;
 
             }
@@ -212,7 +221,7 @@ namespace ProjectTemplate
         }
 
         [WebMethod(EnableSession = true)]
-        public Staff[] listMentees()
+        public Staff[] ListMentees()
         {
 
             DataTable sqlDt = new DataTable("staff");
@@ -241,10 +250,40 @@ namespace ProjectTemplate
                     mb = sqlDt.Rows[i]["myerBriggs"].ToString(),
                     disc = sqlDt.Rows[i]["disc"].ToString()
                 });
-            };
+            }
             //convert the list of accounts to an array and return!
             return mentees.ToArray();
 
+        }
+
+        [WebMethod(EnableSession = true)] 
+        public void ConnectMentee(string menteeId)
+        {
+            string sqlSelect = "update Staff set MentorId=@mentorValue where StaffId=@menteeValue;";
+
+            //set up our connection object to be ready to use our connection string
+            MySqlConnection con = new MySqlConnection(getConString());
+            //set up our command object to use our connection, and our query
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, con);
+
+            //tell our command to replace the @parameters with real values
+            //we decode them because they came to us via the web so they were encoded
+            //for transmission (funky characters escaped, mostly)
+            sqlCommand.Parameters.AddWithValue("@mentorValue", HttpUtility.UrlDecode(GetSessionId()));
+            sqlCommand.Parameters.AddWithValue("@menteeValue", HttpUtility.UrlDecode(menteeId));
+
+
+            con.Open();
+            //we're using a try/catch so that if the query errors out we can handle it gracefully
+            //by closing the connection and moving on
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+            }
+            con.Close();
         }
     }
 }
