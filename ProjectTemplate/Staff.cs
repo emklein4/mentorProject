@@ -13,5 +13,8 @@ namespace ProjectTemplate
         public string email;
         public string pass;
         public string department;
+        public string role;
+        public string mb;
+        public string disc;
     }
 }

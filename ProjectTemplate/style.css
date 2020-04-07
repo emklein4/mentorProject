@@ -1,4 +1,33 @@
-﻿body {
+﻿.split {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+/* Control the left side */
+.left {
+    left: 0;
+}
+
+/* Control the right side */
+.right {
+    right: 0;
+}
+
+/* If you want the content centered horizontally and vertically */
+.centered {
+    /*position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);*/
+    text-align: center;
+}
+
+body {
     margin: 0;
     padding: 0;
     background: url(backgroundImage.png);
@@ -26,13 +55,52 @@
     border-radius: 5px;
     border: 2px solid #dddddd;
 }
+/*<<<<<<< HEAD
 
+          
+=======
+>>>>>>> ment
+        }*/
+/*#navigation {
+            display: none;
+            width: 100%;
+            overflow: hidden;
+            top:0;
+        }
+
+<<<<<<< HEAD
+            #navigation a {
+                text-align: center;
+                height: 13px;
+                transition: width 1.5s;
+                font-size: 20px;
+                font-weight: bold;
+                cursor: pointer;
+                background: #403022;
+                color: #1E91D9;
+                /*top: 0;*/
+/*float:left;
+                padding:14px 16px;
+                text-decoration: none;
+                
+                width:10%;
+            }
+                #navigation a:hover {
+                    width: 300px;
+                    background: #BF9B7A;
+                }
+                */
+
+/* #Logon {
+        
+=======*/
 #Logon {
+    /*>>>>>>> ment*/
     width: 320px;
     height: 420px;
     background: rgba(0,0,0,0.5);
     color: #fff;
-    top: 50%;
+    top: 55%;
     left: 50%;
     position: absolute;
     transform: translate(-50%, -50%);
@@ -87,6 +155,178 @@
             color: #39dc79;
         }
 
+.logoImage {
+    padding: 30px;
+    background: rgba(0,0,0,0.25);
+    display: block;
+    max-width: 125px;
+    margin: 0;
+}
+
+.log {
+    padding: 12px 20px;
+    margin: 0 auto;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.15);
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 2px solid #dddddd;
+    background: #ffffff;
+    outline: none;
+    transition: border-color 0.5s;
+}
+
+.avator {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: absolute;
+    top: -50px;
+    left: calc(50% - 50px);
+}
+
+h1 {
+    margin: 0;
+    padding: 0 0 20px;
+    text-align: center;
+    font-size: 22px;
+}
+
+#forgot {
+    padding-left: 50px;
+}
+
+
+#iFrame {
+    margin: auto;
+    position: relative;
+    padding-top: 10%;
+    padding-left: 25%;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/*<<<<<<< HEAD
+        a:visited {
+            color:aliceblue;
+        }
+        /*.transform a{
+            width: 25%;
+        }*/
+/*=======*/
+li a {
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+#logoImage {
+    width: 50px;
+    height: 50px;
+    margin-top: -12%;
+}
+/*>>>>>>> ment*/
+
+#Ment2BId {
+    font-family: "Georgia";
+    font-size: 30px;
+    float: left;
+    padding-top: 14px;
+    padding-left: 3%;
+}
+
+    #Ment2BId:hover {
+        cursor: pointer;
+    }
+
+.navBar {
+    float: right;
+    padding-top: 20px;
+    padding-right: 5px;
+    text-transform: uppercase;
+}
+
+#Profile {
+    width: 700px;
+    height: 420px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    top: 55%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    padding: 70px 30px;
+}
+
+    #Profile input, select {
+        width: 50%;
+        margin-bottom: 20px;
+    }
+
+        #Profile input[type="text"], input[type="password"], select {
+            border: none;
+            border-bottom: 1px solid #fff;
+            background: transparent;
+            outline: none;
+            height: 40px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+    #Profile option {
+        background: black;
+    }
+
+    #Profile select:hover {
+        cursor: pointer;
+    }
+
+    #Profile p {
+        margin: 0;
+        padding: 0;
+        font-weight: bold;
+    }
+
+    #Profile button {
+        border: none;
+        outline: none;
+        height: 40px;
+        background: #1c8adb;
+        color: #fff;
+        font-size: 18px;
+        border-radius: 20px;
+        margin-top: 360px;
+        width: 100%;
+    }
+
+        #Profile button:hover {
+            cursor: pointer;
+            background: #39dc79;
+            color: #000;
+        }
+
+    #Profile a {
+        text-decoration: none;
+        font-size: 14px;
+        color: #fff;
+    }
+
+        #Profile a:hover {
+            color: #39dc79;
+        }
+
 /*.buttons {
             background-color: #8C1D40;
             color: white;
@@ -129,11 +369,4 @@
     position: absolute;
     top: -50px;
     left: calc(50% - 50px);
-}
-
-h1 {
-    margin: 0;
-    padding: 0 0 20px;
-    text-align: center;
-    font-size: 22px;
 }

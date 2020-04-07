@@ -6,16 +6,22 @@ using System.Web.Services;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Web.Http;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace ProjectTemplate
 {
-	[WebService(Namespace = "http://tempuri.org/")]
-	[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-	[System.ComponentModel.ToolboxItem(false)]
-	[System.Web.Script.Services.ScriptService]
+    [WebService(Namespace = "http://tempuri.org/")]
+    [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
+    [System.ComponentModel.ToolboxItem(false)]
+    [System.Web.Script.Services.ScriptService]
 
-	public class ProjectServices : System.Web.Services.WebService
-	{
+    public class ProjectServices : System.Web.Services.WebService
+    {
+
+        public string sessionID;
         ////////////////////////////////////////////////////////////////////////
         ///replace the values of these variables with your database credentials
         ////////////////////////////////////////////////////////////////////////
@@ -27,38 +33,45 @@ namespace ProjectTemplate
         ////////////////////////////////////////////////////////////////////////
         ///call this method anywhere that you need the connection string!
         ////////////////////////////////////////////////////////////////////////
-        private string getConString() {
-			return "SERVER=107.180.1.16; PORT=3306; DATABASE=" + dbName+"; UID=" + dbID + "; PASSWORD=" + dbPass;
-		}
-		////////////////////////////////////////////////////////////////////////
-		/////////////////////////////////////////////////////////////////////////
-		//don't forget to include this decoration above each method that you want
-		//to be exposed as a web service!
-		[WebMethod(EnableSession = true)]
-		/////////////////////////////////////////////////////////////////////////
-		public string TestConnection()
-		{
-			try
-			{
-				string testQuery = "select * from test";
+        private string getConString()
+        {
+            return "SERVER=107.180.1.16; PORT=3306; DATABASE=" + dbName + "; UID=" + dbID + "; PASSWORD=" + dbPass;
+        }
+        ////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////
+        //don't forget to include this decoration above each method that you want
+        //to be exposed as a web service!
+        [WebMethod(EnableSession = true)]
+        /////////////////////////////////////////////////////////////////////////
+        public string TestConnection()
+        {
+            try
+            {
+                string testQuery = "select * from test";
 
-				////////////////////////////////////////////////////////////////////////
-				///here's an example of using the getConString method!
-				////////////////////////////////////////////////////////////////////////
-				MySqlConnection con = new MySqlConnection(getConString());
-				////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////
+                ///here's an example of using the getConString method!
+                ////////////////////////////////////////////////////////////////////////
+                MySqlConnection con = new MySqlConnection(getConString());
+                ////////////////////////////////////////////////////////////////////////
 
-				MySqlCommand cmd = new MySqlCommand(testQuery, con);
-				MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-				DataTable table = new DataTable();
-				adapter.Fill(table);
-				return "Success!";
-			}
-			catch (Exception e)
-			{
-				return "Something went wrong, please check your credentials and db name and try again.  Error: "+e.Message;
-			}
-		}
+                MySqlCommand cmd = new MySqlCommand(testQuery, con);
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                DataTable table = new DataTable();
+                adapter.Fill(table);
+                return "Success!";
+            }
+            catch (Exception e)
+            {
+                return "Something went wrong, please check your credentials and db name and try again.  Error: " + e.Message;
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        public string GetSessionId()
+        {
+            return Session["StaffId"].ToString();
+        }
         /*[WebMethod]
         public void ProcessRequest(HttpContext context)
             {
@@ -73,7 +86,6 @@ namespace ProjectTemplate
                     }
                     context.Response.ContentType = "text/plain";
                 }
-
             }*/
 
         [WebMethod(EnableSession = true)] //NOTICE: gotta enable session on each individual method
@@ -106,7 +118,7 @@ namespace ProjectTemplate
             sqlDa.Fill(sqlDt);
             //check to see if any rows were returned.  If they were, it means it's 
             //a legit account
-            
+
             if (sqlDt.Rows.Count > 0)
             {
                 //if we found an account, store the id and admin status in the session
@@ -115,11 +127,12 @@ namespace ProjectTemplate
 
                 string accountID = sqlDt.Rows[0]["StaffId"].ToString();
                 Session["Admin"] = sqlDt.Rows[0]["Admin"];
-                Session["StaffId"] = sqlDt.Rows[0]["StaffId"];
+                Session["StaffId"] = sqlDt.Rows[0]["StaffId"].ToString();
+                sessionID = sqlDt.Rows[0]["StaffId"].ToString();
                 return accountID;
 
             }
-          
+
             return null;
 
         }
@@ -150,18 +163,102 @@ namespace ProjectTemplate
                 lname = sqlDt.Rows[0]["LastName"].ToString(),
                 email = sqlDt.Rows[0]["Email"].ToString(),
                 pass = sqlDt.Rows[0]["password"].ToString(),
+                department = sqlDt.Rows[0]["Department"].ToString(),
+                role = sqlDt.Rows[0]["Department"].ToString(),
+                mb = sqlDt.Rows[0]["StaffTitle"].ToString(),
+                disc = sqlDt.Rows[0]["disc"].ToString()
             };
             //convert the list of accounts to an array and return!
             return activeUser;
 
         }
 
+        [WebMethod(EnableSession = true)]
+        public Staff LoadMentor(string ID)
+        {
+
+            DataTable sqlDt = new DataTable("staff");
+            string sqlSelect = "SELECT B.* FROM codeagainsthumanity.Staff AS A LEFT OUTER JOIN codeagainsthumanity.Staff AS B ON A.MentorID = B.StaffID where A.StaffID = @uidvalue;";
+            MySqlConnection sqlConnection = new MySqlConnection(getConString());
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            sqlCommand.Parameters.AddWithValue("@uidvalue", HttpUtility.UrlDecode(ID));
+
+            //gonna use this to fill a data table
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            //filling the data table
+            sqlDa.Fill(sqlDt);
+            Staff mentor = new Staff
+            {
+                id = ID,
+                fname = sqlDt.Rows[0]["FirstName"].ToString(),
+                lname = sqlDt.Rows[0]["LastName"].ToString(),
+                email = sqlDt.Rows[0]["Email"].ToString(),
+                pass = sqlDt.Rows[0]["password"].ToString(),
+                department = sqlDt.Rows[0]["Department"].ToString(),
+                role = sqlDt.Rows[0]["StaffTitle"].ToString(),
+                mb = sqlDt.Rows[0]["myerBriggs"].ToString(),
+                disc = sqlDt.Rows[0]["disc"].ToString()
+            };
+            //convert the list of accounts to an array and return!
+            return mentor;
+
+        }
+
+        [WebMethod(EnableSession = true)]
+        public Staff LoadMentee(string ID)
+        {
+
+            DataTable sqlDt = new DataTable("staff");
+            string sqlSelect = "SELECT B.* FROM codeagainsthumanity.Staff AS A LEFT OUTER JOIN codeagainsthumanity.Staff AS B ON A.StaffID = B.MentorID where A.StaffID = @uidvalue;";
+            
+            MySqlConnection sqlConnection = new MySqlConnection(getConString());
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            sqlCommand.Parameters.AddWithValue("@uidvalue", HttpUtility.UrlDecode(ID));
+
+            //gonna use this to fill a data table
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            //filling the data table
+            sqlDa.Fill(sqlDt);
+            Staff mentee = new Staff
+            {
+                id = ID,
+                fname = sqlDt.Rows[0]["FirstName"].ToString(),
+                lname = sqlDt.Rows[0]["LastName"].ToString(),
+                email = sqlDt.Rows[0]["Email"].ToString(),
+                pass = sqlDt.Rows[0]["password"].ToString(),
+                department = sqlDt.Rows[0]["Department"].ToString(),
+                role = sqlDt.Rows[0]["StaffTitle"].ToString(),
+                mb = sqlDt.Rows[0]["myerBriggs"].ToString(),
+                disc = sqlDt.Rows[0]["disc"].ToString()
+            };
+            //convert the list of accounts to an array and return!
+            return mentee;
+
+        }
+
+        [HttpGet]
         [WebMethod]
-        public void CreateAccount(string fname, string lname, string email, string pass, string myer,
+        public async Task<string> GetAsync(string uri)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return await reader.ReadToEndAsync();
+            }
+        }
+
+        [WebMethod]
+        public string CreateAccount(string fname, string lname, string email, string pass, string myer,
             string dept, string role, string disc)
         {
             string sqlSelect = "insert into Staff (Lastname, Firstname, Email, password, Department, StaffTitle, myerBriggs, disc) " +
-                "values(@lastValue, @firstValue, @emailValue, @passValue, @deptValue, @roleValue, @myerValue, @discValue);";
+                "values (@lastValue, @firstValue, @emailValue, @passValue, @deptValue, @roleValue, @myerValue, @discValue);";
 
             MySqlConnection sqlConnection = new MySqlConnection(getConString());
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -175,8 +272,8 @@ namespace ProjectTemplate
             sqlCommand.Parameters.AddWithValue("@myerValue", HttpUtility.UrlDecode(myer));
             sqlCommand.Parameters.AddWithValue("@discValue", HttpUtility.UrlDecode(disc));
 
-
-            //this time, we're not using a data adapter to fill a data table.  We're just
+            var response = GetAsync("https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=78d26vdxwlrqb7&redirect_uri=http%3A%2F%2Flocalhost%3A50287%2Findex.html&state=fooobar&scope=r_liteprofile%20r_emailaddress%20w_member_social");
+            //this time, we're not using a data adapter to fill a data table.  We're just                                                  %3A = :    %2F = /
             //opening the connection, telling our command to "executescalar" which says basically
             //execute the query and just hand me back the number the query returns (the ID, remember?).
             //don't forget to close the connection!
@@ -191,6 +288,73 @@ namespace ProjectTemplate
             {
             }
             sqlConnection.Close();
+            return response.ToString();
         }
-	}
+
+        [WebMethod(EnableSession = true)]
+        public Staff[] ListMentees()
+        {
+
+            DataTable sqlDt = new DataTable("staff");
+            string sqlSelect = "select * from Staff where MentorId is null and Mentor=0;";
+
+            MySqlConnection sqlConnection = new MySqlConnection(getConString());
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+
+            //gonna use this to fill a data table
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            //filling the data table
+            sqlDa.Fill(sqlDt);
+            List<Staff> mentees = new List<Staff>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                mentees.Add(new Staff
+                {
+                    id = sqlDt.Rows[i]["FirstName"].ToString(),
+                    fname = sqlDt.Rows[i]["FirstName"].ToString(),
+                    lname = sqlDt.Rows[i]["LastName"].ToString(),
+                    email = sqlDt.Rows[i]["Email"].ToString(),
+                    pass = sqlDt.Rows[i]["password"].ToString(),
+                    department = sqlDt.Rows[i]["Department"].ToString(),
+                    role = sqlDt.Rows[i]["StaffTitle"].ToString(),
+                    mb = sqlDt.Rows[i]["myerBriggs"].ToString(),
+                    disc = sqlDt.Rows[i]["disc"].ToString()
+                });
+            }
+            //convert the list of accounts to an array and return!
+            return mentees.ToArray();
+
+        }
+
+        [WebMethod(EnableSession = true)]
+        public void ConnectMentee(string menteeId)
+        {
+            string sqlSelect = "update Staff set MentorId=@mentorValue where StaffId=@menteeValue;";
+
+            //set up our connection object to be ready to use our connection string
+            MySqlConnection con = new MySqlConnection(getConString());
+            //set up our command object to use our connection, and our query
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, con);
+
+            //tell our command to replace the @parameters with real values
+            //we decode them because they came to us via the web so they were encoded
+            //for transmission (funky characters escaped, mostly)
+            sqlCommand.Parameters.AddWithValue("@mentorValue", HttpUtility.UrlDecode(GetSessionId()));
+            sqlCommand.Parameters.AddWithValue("@menteeValue", HttpUtility.UrlDecode(menteeId));
+
+
+            con.Open();
+            //we're using a try/catch so that if the query errors out we can handle it gracefully
+            //by closing the connection and moving on
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+            }
+            con.Close();
+        }
+    }
 }

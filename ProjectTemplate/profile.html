@@ -1,0 +1,317 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <!--DO NOT FORGET THIS SCRIPT TAG SO YOU CAN USE JQUERY!!!!!-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    
+    <style>
+        /* Split the screen in half */
+        .split {
+            height: 100%;
+            width: 50%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        /* Control the left side */
+        .left {
+            left: 0;
+        }
+
+        /* Control the right side */
+        .right {
+            right: 0;
+        }
+
+        /* If you want the content centered horizontally and vertically */
+        .centered {
+            /*position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);*/
+            text-align: center;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: url(backgroundImage.png);
+            background-position: center;
+            font-family: sans-serif;
+        }
+
+        #LogIn {
+            background-color: #8C1D40;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            padding: 10px;
+            color: #ffffff;
+            font-weight: bold;
+            background: #8C1D40;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 2px solid #dddddd;
+        }
+
+        #Profile {
+            width: 700px;
+            height: 420px;
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            top: 55%;
+            left: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            box-sizing: border-box;
+            padding: 70px 30px;
+        }
+
+            #Profile input, select {
+                width: 50%;
+                margin-bottom: 20px;
+            }
+
+                #Profile input[type="text"], input[type="password"], select {
+                    border: none;
+                    border-bottom: 1px solid #fff;
+                    background: transparent;
+                    outline: none;
+                    height: 40px;
+                    color: #fff;
+                    font-size: 16px;
+                }
+
+            #Profile option {
+                background: black;
+            }
+
+            #Profile select:hover {
+                cursor: pointer;
+            }
+
+            #Profile p {
+                margin: 0;
+                padding: 0;
+                font-weight: bold;
+            }
+
+            #Profile button {
+                border: none;
+                outline: none;
+                height: 40px;
+                background: #1c8adb;
+                color: #fff;
+                font-size: 18px;
+                border-radius: 20px;
+                margin-top: 360px;
+                width: 100%;
+            }
+
+                #Profile button:hover {
+                    cursor: pointer;
+                    background: #39dc79;
+                    color: #000;
+                }
+
+            #Profile a {
+                text-decoration: none;
+                font-size: 14px;
+                color: #fff;
+            }
+
+                #Profile a:hover {
+                    color: #39dc79;
+                }
+
+        /*.buttons {
+            background-color: #8C1D40;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+        }*/
+
+        .logoImage {
+            padding: 30px;
+            background: rgba(0,0,0,0.25);
+            display: block;
+            max-width: 125px;
+            margin: 0;
+        }
+
+        .log {
+            padding: 12px 20px;
+            margin: 0 auto;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 2px solid #dddddd;
+            background: #ffffff;
+            outline: none;
+            transition: border-color 0.5s;
+        }
+
+        .avator {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            position: absolute;
+            top: -50px;
+            left: calc(50% - 50px);
+        }
+
+        h1 {
+            margin: 0;
+            padding: 0 0 20px;
+            text-align: center;
+            font-size: 22px;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        li a {
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        #logoImage {
+            width: 50px;
+            height: 50px;
+            margin-top: -12%;
+        }
+
+        #Ment2BId {
+            font-family: "Georgia";
+            font-size: 30px;
+            float: left;
+            padding-top: 14px;
+            padding-left: 3%;
+        }
+
+            #Ment2BId:hover {
+                cursor: pointer;
+            }
+
+        .navBar {
+            float: right;
+            padding-top: 20px;
+            padding-right: 5px;
+            text-transform: uppercase;
+        }
+    </style>
+    <!--END OF YOUR OWN CSS-->
+</head>
+<body>
+    <!--<button onclick="javascript: TestButtonHandler();">Click here to test connection!</button>-->
+    <div id="NavigationBar">
+        <ul>
+            <li id="Ment2BId"><a href="homepage.html"><img src="logo.png" id="logoImage" align="middle">Ment2B</a></li>
+            <li class="navBar"><a href="index.html">Sign out</a></li>
+            <li class="navBar"><a href="profile.html">My Profile</a></li>
+            <li class="navBar"><a href="#">My Mentee</a></li>
+            <li class="navBar"><a href="#">My Mentor</a></li>
+        </ul>
+    </div>
+    <div id="Profile">
+        <a id="logoImage" title="Mentor/ Mentee Program Logo"><img src="logo.png" class="avator"><br /></a>
+
+        <form>
+            <div class="split left">
+                <div class="centered">
+                    <p>First Name</p>
+                    <input class="log" type="text" placeholder="Enter First Name" id="fname" required>
+
+                    <p>Last Name</p>
+                    <input class="log" type="text" placeholder="Enter Last Name" id="lname" required>
+
+                    <p>E-mail</p>
+                    <input class="log" type="text" placeholder="Enter e-mail" id="email" required>
+
+                    <p>Password</p>
+                    <input class="log" type="password" placeholder="Enter Password" id="psw" required>
+
+                    <p>Department</p>
+                    <input class="log" type="text" placeholder="Enter Department" id="dep" required>
+                </div>
+            </div>
+
+            <div class="split right">
+                <div class="centered">
+                    <p>Role</p>
+                    <input class="log" type="text" placeholder="Enter Role" id="role" required>
+
+                    <p>Enter Personality Results Below:</p>
+                    <br>
+                    <p>
+                        <a href="https://www.onlinepersonalitytests.org/mbti/" target="_blank">
+                            Take Myers Briggs personality Test Here
+                        </a>
+                    </p>
+                    <select id="myers">
+                        <option value="1">ISTJ</option>
+                        <option value="2">ISTP</option>
+                        <option value="3">ESTP</option>
+                        <option value="4">ESTJ</option>
+                        <option value="5">ISFJ</option>
+                        <option value="6">ISFP</option>
+                        <option value="7">ESFP</option>
+                        <option value="8">ESFJ</option>
+                        <option value="9">INFJ</option>
+                        <option value="10">INFP</option>
+                        <option value="11">ENFP</option>
+                        <option value="12">ENFJ</option>
+                        <option value="13">INTJ</option>
+                        <option value="14">INTP</option>
+                        <option value="15">ENTP</option>
+                        <option value="16">ENTJ</option>
+                    </select>
+
+                    <p><a href="https://www.123test.com/disc-personality-test/" target="_blank">Take Disc Personality Test Here</a></p>
+                    <select id="disc">
+                        <option value="1">D</option>
+                        <option value="2">I</option>
+                        <option value="3">S</option>
+                        <option value="4">C</option>
+                    </select>
+
+                    <p>Upload Resume</p>
+                    <input type="file" id="fileUpload">
+
+                </div>
+            </div>
+
+
+            <button id="create" type="button" onclick="createNewAccount()">Create Account</button>
+
+        </form>
+    </div>
+</body>
+</html>
