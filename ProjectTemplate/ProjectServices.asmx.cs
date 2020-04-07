@@ -329,7 +329,7 @@ namespace ProjectTemplate
             {
                 mentees.Add(new Staff
                 {
-                    id = sqlDt.Rows[i]["FirstName"].ToString(),
+                    id = sqlDt.Rows[i]["StaffId"].ToString(),
                     fname = sqlDt.Rows[i]["FirstName"].ToString(),
                     lname = sqlDt.Rows[i]["LastName"].ToString(),
                     email = sqlDt.Rows[i]["Email"].ToString(),

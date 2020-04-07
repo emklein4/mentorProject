@@ -8,7 +8,7 @@
     <link href="./mentorStyle.css" rel="stylesheet" type="text/css" />
 </head>
 <body onload="loadMentees()">
-    <div id="navigation" class="transform">
+    <div id="navigation" class="transform" style="display: block">
         <a href="#homePage">Home</a>
         <a>My Mentor</a>
         <a>My Profile</a>
@@ -19,7 +19,7 @@
         <ul id="mentees"></ul>
     </div>
     <div id="fullMentee">
-        <h2 id="fullname"></h2>
+        <h3 id="fullname"></h3>
         <h3 id="job"></h3>
         <hr />
         <div style="float: left;">
@@ -34,13 +34,14 @@
         </div>
         <div style="clear: both;">
             <a id="email"></a>
-            <button id="connect">Connect!</button>
+            <div id="buttonDiv">
+
+            </div>
         </div>
     </div>
     
 
     <script>
-        var availableMentees;
 
         function loadMentees() {
             var webMethod = "ProjectServices.asmx/ListMentees";
@@ -54,16 +55,14 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (mentees) {
-                    availableMentees = mentees.d;
+                    var availableMentees = mentees.d;
                     var ul = document.getElementById('mentees');
+                    var stmt = ''
                     for (var i = 0; i < availableMentees.length; i++) {
-                        var li = document.createElement('li');
-                        li.className = "mentee";
-                        li.addEventListener('click', function () { return fullMentee(i) });
-
-                        li.innerHTML = '<h4 onclick=fullMentee(' + i + ')>' + availableMentees[i].fname + ' ' + availableMentees[i].lname + '</h4>' +
-                            '<p>' + availableMentees[i].department + '--' + availableMentees[i].role + '</p>';
-                        ul.appendChild(li);
+                        stmt = stmt + '<li class="mentee" onclick="fullMentee(' + i + ')"><h4>' + availableMentees[i].fname + ' ' + availableMentees[i].lname + '</h4>' +
+                            '<p>' + availableMentees[i].department + '--' + availableMentees[i].role + '</p></li>';
+                        console.log(stmt);
+                        ul.innerHTML = stmt;
                     }
 
                 },
@@ -95,26 +94,53 @@
         }
 
         function fullMentee(index) {
-            div = document.getElementById('fullMentee');
-            div.style.display = 'block';
+            console.log(index);
+            var availableMentees;
+            var webMethod = "ProjectServices.asmx/ListMentees";
+            var parameters = "{}";
 
-            name = document.getElementById('fullname');
-            job = document.getElementById('job');
-            mb = document.getElementById('mb');
-            disc = document.getElementById('disc');
-            email = document.getElementById('email');
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (mentees) {
+                    availableMentees = mentees.d;
+                    console.log(availableMentees);
 
-            console.log(availableMentees[index]);
+                    div = document.getElementById('fullMentee');
+                    div.style.display = 'block';
 
-            name.innerHTML = availableMentees[index].fname + ' ' + availableMentees[index].lname;
-            job.innerHTML = availableMentees[index].department + ' - ' + availableMentees[index].role;
-            mb.innerHTML = availableMentees[index].mb;
-            disc.innerHTML = availableMentees[index].disc;
-            email.innerHTML = availableMentees[index].email;
-            email.href = 'mailto:' + availableMentees[index].email;
+                    // name = document.getElementById('fullname');
+                    job = document.getElementById('job');
+                    mb = document.getElementById('mb');
+                    disc = document.getElementById('disc');
+                    email = document.getElementById('email');
 
-            button = document.getElementById('connect');
-            button.onclick = function () {return connectMentee(availableMentees[index].id)};
+                    console.log(availableMentees);
+                    console.log(availableMentees[index]);
+
+                    document.getElementById('fullname').innerHTML = availableMentees[index].fname + ' ' + availableMentees[index].lname;
+                    job.innerHTML = availableMentees[index].department + ' - ' + availableMentees[index].role;
+                    mb.innerHTML = availableMentees[index].mb;
+                    disc.innerHTML = availableMentees[index].disc;
+                    email.innerHTML = availableMentees[index].email;
+                    email.href = 'mailto:' + availableMentees[index].email;
+
+                    buttonDiv = document.getElementById('buttonDiv');
+                    buttonDiv.innerHTML = '<button type="button" onclick="connectMentee(' + availableMentees[index].id + ')">Connect with ' +
+                        availableMentees[index].fname + '</button>';
+                }
+
+                ,
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                    console.log(e.responseText);
+                }
+            });
+
         }
     </script>
 </body>
