@@ -313,7 +313,7 @@ namespace ProjectTemplate
             {
                 mentees.Add(new Staff
                 {
-                    id = sqlDt.Rows[i]["FirstName"].ToString(),
+                    id = sqlDt.Rows[i]["StaffId"].ToString(),
                     fname = sqlDt.Rows[i]["FirstName"].ToString(),
                     lname = sqlDt.Rows[i]["LastName"].ToString(),
                     email = sqlDt.Rows[i]["Email"].ToString(),
@@ -330,9 +330,18 @@ namespace ProjectTemplate
         }
         
         [WebMethod(EnableSession = true)]
-        public void ConnectMentee(string menteeId)
+        public void RequestMentee(string menteeId, string message=null)
         {
-            string sqlSelect = "update Staff set MentorId=@mentorValue where StaffId=@menteeValue;";
+            string sqlSelect = string.Empty;
+            if (message != null)
+            {
+                sqlSelect = "insert into requests(StaffId, MentorId, request) values(@menteeValue, @mentorValue, @messageValue);";
+            }
+            else
+            {
+                sqlSelect = "insert into requests(StaffId, MentorId) values (@menteeValue, @mentorValue);";
+            }
+            
 
             //set up our connection object to be ready to use our connection string
             MySqlConnection con = new MySqlConnection(getConString());
@@ -344,6 +353,7 @@ namespace ProjectTemplate
             //for transmission (funky characters escaped, mostly)
             sqlCommand.Parameters.AddWithValue("@mentorValue", HttpUtility.UrlDecode(GetSessionId()));
             sqlCommand.Parameters.AddWithValue("@menteeValue", HttpUtility.UrlDecode(menteeId));
+            sqlCommand.Parameters.AddWithValue("@messageValue", HttpUtility.UrlDecode(message));
 
 
             con.Open();
@@ -357,6 +367,115 @@ namespace ProjectTemplate
             {
             }
             con.Close();
+        }
+
+        [WebMethod(EnableSession = true)]
+        public Staff[] LoadRequests()
+        {
+
+            DataTable sqlDt = new DataTable("staff");
+            string sqlSelect = "select Staff.StaffId, FirstName, LastName, Department, StaffTitle, myerBriggs, disc, request from Staff left join requests " +
+                "on Staff.StaffId = requests.StaffId where Staff.StaffId in (select MentorId from requests where StaffId = @uidvalue and " +
+                "status = 'Pending');";
+
+            MySqlConnection sqlConnection = new MySqlConnection(getConString());
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            sqlCommand.Parameters.AddWithValue("@uidvalue", GetSessionId());
+
+            //gonna use this to fill a data table
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            //filling the data table
+            sqlDa.Fill(sqlDt);
+
+            List<Staff> potentialMentors = new List<Staff>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                potentialMentors.Add(new Staff
+                {
+                    id = sqlDt.Rows[i]["StaffId"].ToString(),
+                    fname = sqlDt.Rows[i]["FirstName"].ToString(),
+                    lname = sqlDt.Rows[i]["LastName"].ToString(),
+                    department = sqlDt.Rows[i]["Department"].ToString(),
+                    role = sqlDt.Rows[i]["StaffTitle"].ToString(),
+                    mb = sqlDt.Rows[i]["myerBriggs"].ToString(),
+                    disc = sqlDt.Rows[i]["disc"].ToString(),
+                    request = sqlDt.Rows[i]["request"].ToString()
+                });
+            }
+            //convert the list of accounts to an array and return!
+            return potentialMentors.ToArray();
+        }
+
+        [WebMethod(EnableSession = true)]
+        public void AcceptRequest(string mentorId)
+        {
+            string sqlUpdate = "update requests set status = 'Accepted' where StaffId = @menteeValue and MentorId = @mentorValue;" +
+                " update requests set status = 'Rejected' where StaffId = @menteeValue and status != 'Accepted';";
+
+            string sqlConnect = "update Staff set MentorId=@mentorValue where StaffId=@menteeValue;";
+
+            //set up our connection object to be ready to use our connection string
+            MySqlConnection con = new MySqlConnection(getConString());
+            //set up our command object to use our connection, and our query
+            MySqlCommand sqlCommand = new MySqlCommand(sqlConnect, con);
+            MySqlCommand sqlCommand2 = new MySqlCommand(sqlUpdate, con);
+
+
+            //tell our command to replace the @parameters with real values
+            //we decode them because they came to us via the web so they were encoded
+            //for transmission (funky characters escaped, mostly)
+            sqlCommand.Parameters.AddWithValue("@menteeValue", HttpUtility.UrlDecode(GetSessionId()));
+            sqlCommand.Parameters.AddWithValue("@mentorValue", HttpUtility.UrlDecode(mentorId));
+            sqlCommand2.Parameters.AddWithValue("@menteeValue", HttpUtility.UrlDecode(GetSessionId()));
+            sqlCommand2.Parameters.AddWithValue("@mentorValue", HttpUtility.UrlDecode(mentorId));
+
+
+            con.Open();
+            //we're using a try/catch so that if the query errors out we can handle it gracefully
+            //by closing the connection and moving on
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                sqlCommand2.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+            }
+            con.Close();
+
+        }
+
+        [WebMethod(EnableSession = true)]
+        public void RejectRequest(string mentorId)
+        {
+            string sqlUpdate = " update requests set status = 'Rejected' where StaffId = @menteeValue and MentorId = @mentorValue;";
+
+            //set up our connection object to be ready to use our connection string
+            MySqlConnection con = new MySqlConnection(getConString());
+            //set up our command object to use our connection, and our query
+            MySqlCommand sqlCommand = new MySqlCommand(sqlUpdate, con);
+
+
+            //tell our command to replace the @parameters with real values
+            //we decode them because they came to us via the web so they were encoded
+            //for transmission (funky characters escaped, mostly)
+            sqlCommand.Parameters.AddWithValue("@menteeValue", HttpUtility.UrlDecode(GetSessionId()));
+            sqlCommand.Parameters.AddWithValue("@mentorValue", HttpUtility.UrlDecode(mentorId));
+
+
+            con.Open();
+            //we're using a try/catch so that if the query errors out we can handle it gracefully
+            //by closing the connection and moving on
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+            }
+            con.Close();
+
         }
     }
 }

@@ -1,6 +1,8 @@
 // JavaScript source code
 var activeID;
 var activeUser;
+var mentorRequests;
+
 function TestButtonHandler() {
     var webMethod = "ProjectServices.asmx/TestConnection";
     var parameters = "{}";
@@ -89,6 +91,7 @@ function LogOn(email, pass) {
                 //var x = document.getElementById("buttonsID");
                 //location.replace("homepage.html");
                 LoadUser();
+                loadRequests();
                 //var y = document.getElementById("Logon");
                 //y.style.display = "none";
 
@@ -134,6 +137,7 @@ function LoadUser() {
             y.style.display = "block";
             var z = document.getElementById("iFrame");
             z.style.display = "block";
+            document.getElementById('menteeArea').style.display = "block";
             var q = document.getElementById("Profile");
             q.style.display = "none";
 
@@ -277,6 +281,102 @@ function MenteeProfile() {
         error: function (e) {
             console.log(e.responseText);
             alert("load user error");
+        }
+    });
+}
+
+function loadRequests() {
+    var webMethod = "ProjectServices.asmx/LoadRequests";
+    var parameters = "{}";
+
+    //jQuery ajax method
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {
+            mentorRequests = msg.d;
+            console.log(mentorRequests);
+            var stmt
+            for (var i = 0; i < mentorRequests.length; i++) {
+                stmt = stmt + '<li id="' + i + '"onclick=moreInfo(' + i + ')><h3>' + mentorRequests[i].fname +
+                    ' ' + mentorRequests[i].lname + '</h3><button onclick="acceptRequest(' + mentorRequests[i].id +
+                    ')">Acccept</button><button onclick="rejectRequest((' + mentorRequests[i].id + ')">Reject</button></li>';
+
+            }
+            document.getElementById('mentorList').innerHTML = stmt;
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+        }
+    });
+}
+
+function moreInfo(index) {
+    var Requests;
+    var webMethod = "ProjectServices.asmx/LoadRequests";
+    var parameters = "{}";
+
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {
+            Requests = msg.d;
+            console.log(Requests);
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+        }
+    });
+
+    let li = document.getElementById(index);
+    let p = document.createElement('p');
+
+    p.innerHTML = 'Message from User: ' + Requests[index].request;
+    li.appendChild(p);
+}
+
+function acceptRequest(id) {
+    var webMethod = "ProjectServices.asmx/AcceptRequest";
+    var parameters = "{\"mentorId\":\"" + encodeURI(id) + "\"}";
+
+    //jQuery ajax method
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function () {
+            alert('ran webmethod at least');
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+        }
+    });
+}
+
+function rejectRequest(id) {
+    var webMethod = "ProjectServices.asmx/RejectRequest";
+    var parameters = "{\"mentorId\":\"" + encodeURI(id) + "\"}";
+
+    //jQuery ajax method
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function () {
+            alert('ran webmethod at least');
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
         }
     });
 }

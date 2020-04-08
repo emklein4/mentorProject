@@ -16,6 +16,7 @@ namespace ProjectTemplate
         public string role;
         public string mb;
         public string disc;
+        public string request;
 
     }
 }
