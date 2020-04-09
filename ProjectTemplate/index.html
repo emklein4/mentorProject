@@ -40,7 +40,8 @@
     </div>
 
     <div id='iFrame' style="display: none">
-        <iframe src='https://calendar.google.com/calendar/embed?src=asu.edu_6p28703btj82p1fvo7o1ld8kv4%40group.calendar.google.com&ctz=America%2FPhoenix' style='border: 0' width='600' height='400' frameborder='0' scrolling='no'></iframe>;
+        <!--<iframe src='https://calendar.google.com/calendar/embed?src=asu.edu_6p28703btj82p1fvo7o1ld8kv4%40group.calendar.google.com&ctz=America%2FPhoenix' style='border: 0' width='600' height='400' frameborder='0' scrolling='no'></iframe>;-->
+        <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23ffffff&amp;ctz=America%2FPhoenix&amp;src=YXN1LmVkdV82cDI4NzAzYnRqODJwMWZ2bzdvMWxkOGt2NEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&amp;src=ZW4udXNhI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;color=%23D50000&amp;color=%230B8043" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
 
     <div id="Profile" style="display: none">
@@ -118,27 +119,32 @@
         </form>
     </div>
     <form class="listMentee">
+        
         <div id="menteeDiv" style="display:none">
+            <p style="font-size: 20px;"><b><em>Possible Mentees: </em></b></p>
             <ul id="mentees"></ul>
         </div>
-        <div id="fullMentee" style=" display:none">
-            <h3 id="fullname"></h3>
-            <h3 id="job"></h3>
-            <hr />
-            <div style="float: left;">
-                <h4>Myers Briggs</h4>
+        <div id="fullId">
+            <div id="fullMentee" style=" display:none">
+                <p style="font-size: 20px;"><b><em>Selected Mentee :</em></b></p>
+                <h3 id="fullname"></h3>
+                <h3 id="job"></h3>
                 <hr />
-                <p id="mb"></p>
-            </div>
-            <div style="float: right;">
-                <h4>DISC</h4>
-                <hr />
-                <p id="disc"></p>
-            </div>
-            <div style="clear: both;">
-                <a id="email"></a>
-                <div id="buttonDiv">
+                <div style="float: left;">
+                    <h4>Myers Briggs</h4>
+                    <hr />
+                    <p id="mb"></p>
+                </div>
+                <div style="float: right;">
+                    <h4>DISC</h4>
+                    <hr />
+                    <p id="disc"></p>
+                </div>
+                <div style="clear: both;">
+                    <a id="email"></a>
+                    <div id="buttonDiv">
 
+                    </div>
                 </div>
             </div>
         </div>

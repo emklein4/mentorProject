@@ -324,14 +324,15 @@ function loadMentees() {
                 console.log(stmt);
                 ul.innerHTML = stmt;
             }
-            connectMentee();
-            fullMentee();
+            
         },
         error: function (e) {
             alert("this code will only execute if javascript is unable to access the webservice");
             console.log(e.responseText);
         }
     });
+    connectMentee();
+    fullMentee();
 
    
 }

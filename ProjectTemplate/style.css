@@ -248,8 +248,7 @@ li a {
 
     #Ment2BId:hover {
         cursor: pointer;
-        width: 300px;
-        background: #BF9B7A;
+  
     }
 
 
@@ -260,10 +259,16 @@ li a {
     text-transform: uppercase;
 }
     .navBar a:hover {
-        width: 300px;
         background: #BF9B7A;
+        width:500px;
     }
+    /*.navBar a.selected:active {
+        background: #403022;
+    }*/
 
+#NavigationBar a.selected:active {
+    background: #403022;
+}
 
 #Profile {
     width: 700px;
@@ -380,26 +385,47 @@ li a {
     left: calc(50% - 50px);
 }
 
+.listMentee {
+    padding-top:20px;
+    
+}
 #menteeDiv {
-    width: 50%;
+    /*width: 50%;
     height: 90vh;
     float: left;
     overflow-y: auto;
-    background-color: white;
-    padding-top: 4px;
     border: 2px solid #035373;
+    border-width: 10px;*/
+    float: left;
+    overflow-y: auto;
+    padding-right: 10px;
+    width: 50%;
+    height: 90vh;
 }
+    #menteeDiv ul li:hover {
+        cursor: pointer;
+        background: #035373;
+        color: #8C6542;
+    }
 
 
 .mentee {
     display: block;
     background-color: #BF9B7A;
     padding: 2px;
+    border: 2px solid #035373;
+    border-width: 10px;
 }
-
+#fullId {
+    padding-top:15%;
+    padding-right:5%;
+}
 #fullMentee {
     width: 40%;
-    height: 90vh;
-    float: left;
+    height: 60%;
+    padding:10px;
+    float: right;
     display: none;
+    background: #403022;
+    color: #BF9B7A;
 }
