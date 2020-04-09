@@ -170,6 +170,10 @@ function loadProfile() {
             c.style.display = "none";
             var d = document.getElementById("Profile");
             d.style.display = "block";
+            var z = document.getElementById("menteeDiv");
+            z.style.display = "none";
+            var m = document.getElementById("fullMentee");
+            m.style.display = "none";
 
             document.getElementById("fname").value = activeUser.fname;
             document.getElementById("lname").value = activeUser.lname;
@@ -217,6 +221,10 @@ function MentorProfile() {
             d.style.display = "block";
             var e = document.getElementsByTagName("input")
             e.disabled = true;
+            var z = document.getElementById("menteeDiv");
+            z.style.display = "none";
+            var m = document.getElementById("fullMentee");
+            m.style.display = "none";
 
             document.getElementById("fname").value = mentor.fname;
             document.getElementById("lname").value = mentor.lname;
@@ -263,6 +271,10 @@ function MenteeProfile() {
             d.style.display = "block";
             var e = document.getElementsByTagName("input")
             e.disabled = true;
+            var z = document.getElementById("menteeDiv");
+            z.style.display = "none";
+            var m = document.getElementById("fullMentee");
+            m.style.display = "none";
 
             document.getElementById("fname").value = mentee.fname;
             document.getElementById("lname").value = mentee.lname;
@@ -279,4 +291,118 @@ function MenteeProfile() {
             alert("load user error");
         }
     });
+}
+
+function loadMentees() {
+    var webMethod = "ProjectServices.asmx/ListMentees";
+    var parameters = "{}";
+
+    //jQuery ajax method
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (mentees) {
+            var z = document.getElementById("Profile");
+            z.style.display = "none";
+            var c = document.getElementById("iFrame");
+            c.style.display = "none";
+            var z = document.getElementById("menteeDiv");
+            z.style.display = "block";
+            var m = document.getElementById("fullMentee");
+            m.style.display = "block";
+           
+
+            var availableMentees = mentees.d;
+            var ul = document.getElementById('mentees');
+            var stmt = ''
+            for (var i = 0; i < availableMentees.length; i++) {
+                stmt = stmt + '<li class="mentee" onclick="fullMentee(' + i + ')"><h4>' + availableMentees[i].fname + ' ' + availableMentees[i].lname + '</h4>' +
+                    '<p>' + availableMentees[i].department + '--' + availableMentees[i].role + '</p></li>';
+                console.log(stmt);
+                ul.innerHTML = stmt;
+            }
+            connectMentee();
+            fullMentee();
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+            console.log(e.responseText);
+        }
+    });
+
+   
+}
+
+
+function connectMentee(id) {
+    var webMethod = "ProjectServices.asmx/ConnectMentee";
+    var parameters = "{\"menteeId\":\"" + encodeURI(id) + "\"}";
+
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function () {
+            alert("found and ran webmethod");
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+            console.log(e.responseText);
+        }
+    });
+}
+
+function fullMentee(index) {
+    console.log(index);
+    var availableMentees;
+    var webMethod = "ProjectServices.asmx/ListMentees";
+    var parameters = "{}";
+
+    //jQuery ajax method
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (mentees) {
+            availableMentees = mentees.d;
+            console.log(availableMentees);
+
+            div = document.getElementById('fullMentee');
+            div.style.display = 'block';
+
+            // name = document.getElementById('fullname');
+            job = document.getElementById('job');
+            mb = document.getElementById('mb');
+            disc = document.getElementById('disc');
+            email = document.getElementById('email');
+
+            console.log(availableMentees);
+            console.log(availableMentees[index]);
+
+            document.getElementById('fullname').innerHTML = availableMentees[index].fname + ' ' + availableMentees[index].lname;
+            job.innerHTML = availableMentees[index].department + ' - ' + availableMentees[index].role;
+            mb.innerHTML = availableMentees[index].mb;
+            disc.innerHTML = availableMentees[index].disc;
+            email.innerHTML = availableMentees[index].email;
+            email.href = 'mailto:' + availableMentees[index].email;
+
+            buttonDiv = document.getElementById('buttonDiv');
+            buttonDiv.innerHTML = '<button type="button" onclick="connectMentee(' + availableMentees[index].id + ')">Connect with ' +
+                availableMentees[index].fname + '</button>';
+        }
+
+        ,
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+            console.log(e.responseText);
+        }
+    });
+
 }

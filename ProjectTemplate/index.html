@@ -30,91 +30,118 @@
 
     <div id="NavigationBar" style="display: none">
         <ul>
-            <li id="Ment2BId" onclick="LoadUser()"><a href="#"><img src="logo.png" id="logoImage" align="middle">Ment2B</a></li>
+            <li class="navBar" id="Ment2BId" onclick="LoadUser()"><a href="#"><img src="logo.png" id="logoImage" align="middle">Ment2B</a></li>
             <li class="navBar"><a href="index.html">Sign out</a></li>
-            <li class="navBar"><a href="mentees.html">Connect</a></li>
+            <li class="navBar" onclick="loadMentees()"><a href="#">Connect</a></li>
             <li class="navBar" onclick="loadProfile()"><a href="#">My Profile</a></li>
             <li class="navBar" onclick="MenteeProfile()"><a href="#">My Mentee</a></li>
             <li class="navBar" onclick="MentorProfile()"><a href="#">My Mentor</a></li>
         </ul>
     </div>
 
-        <div id='iFrame' style="display: none">
-            <iframe src='https://calendar.google.com/calendar/embed?src=asu.edu_6p28703btj82p1fvo7o1ld8kv4%40group.calendar.google.com&ctz=America%2FPhoenix' style='border: 0' width='600' height='400' frameborder='0' scrolling='no'></iframe>;
-        </div>
+    <div id='iFrame' style="display: none">
+        <iframe src='https://calendar.google.com/calendar/embed?src=asu.edu_6p28703btj82p1fvo7o1ld8kv4%40group.calendar.google.com&ctz=America%2FPhoenix' style='border: 0' width='600' height='400' frameborder='0' scrolling='no'></iframe>;
+    </div>
 
-        <div id="Profile" style="display: none">
-            <a id="logoImage" title="Mentor/ Mentee Program Logo"><img src="logo.png" class="avator"><br /></a>
+    <div id="Profile" style="display: none">
+        <a id="logoImage" title="Mentor/ Mentee Program Logo"><img src="logo.png" class="avator"><br /></a>
 
-            <form>
-                <div class="split left">
-                    <div class="centered">
-                        <p>First Name</p>
-                        <input class="log" type="text" placeholder="First Name" id="fname" required>
+        <form>
+            <div class="split left">
+                <div class="centered">
+                    <p>First Name</p>
+                    <input class="log" type="text" placeholder="First Name" id="fname" required>
 
-                        <p>Last Name</p>
-                        <input class="log" type="text" placeholder="Last Name" id="lname" required>
+                    <p>Last Name</p>
+                    <input class="log" type="text" placeholder="Last Name" id="lname" required>
 
-                        <p>E-mail</p>
-                        <input class="log" type="text" placeholder="E-mail" id="Email" required>
+                    <p>E-mail</p>
+                    <input class="log" type="text" placeholder="E-mail" id="Email" required>
 
-                        <p>Password</p>
-                        <input class="log" type="password" placeholder="Password" id="Psw" required>
+                    <p>Password</p>
+                    <input class="log" type="password" placeholder="Password" id="Psw" required>
 
-                        <p>Department</p>
-                        <input class="log" type="text" placeholder="Department" id="dep" required>
-                    </div>
+                    <p>Department</p>
+                    <input class="log" type="text" placeholder="Department" id="dep" required>
                 </div>
+            </div>
 
-                <div class="split right">
-                    <div class="centered">
-                        <p>Role</p>
-                        <input class="log" type="text" placeholder="Role" id="role" required>
 
-                        <p>Personality Results Below:</p>
-                        <br>
-                        <p>
-                            <a href="https://www.onlinepersonalitytests.org/mbti/" target="_blank">
-                                Take Myers Briggs personality Test Here
-                            </a>
-                        </p>
-                        <select id="myers">
-                            <option value="ISTJ">ISTJ</option>
-                            <option value="ISTP">ISTP</option>
-                            <option value="ESTP">ESTP</option>
-                            <option value="ESTJ">ESTJ</option>
-                            <option value="ISFJ">ISFJ</option>
-                            <option value="ISFP">ISFP</option>
-                            <option value="ESFP">ESFP</option>
-                            <option value="ESFJ">ESFJ</option>
-                            <option value="INFJ">INFJ</option>
-                            <option value="INFP">INFP</option>
-                            <option value="ENFP">ENFP</option>
-                            <option value="ENFJ">ENFJ</option>
-                            <option value="INTJ">INTJ</option>
-                            <option value="INTP">INTP</option>
-                            <option value="ENTP">ENTP</option>
-                            <option value="INTJ">ENTJ</option>
-                        </select>
+            <div class="split right">
+                <div class="centered">
+                    <p>Role</p>
+                    <input class="log" type="text" placeholder="Role" id="role" required>
 
-                        <p><a href="https://www.123test.com/disc-personality-test/" target="_blank">Take Disc Personality Test Here</a></p>
-                        <select id="disc">
-                            <option value="D">D</option>
-                            <option value="I">I</option>
-                            <option value="S">S</option>
-                            <option value="C">C</option>
-                        </select>
+                    <p>Personality Results Below:</p>
+                    <br>
+                    <p>
+                        <a href="https://www.onlinepersonalitytests.org/mbti/" target="_blank">
+                            Take Myers Briggs personality Test Here
+                        </a>
+                    </p>
+                    <select id="myers">
+                        <option value="ISTJ">ISTJ</option>
+                        <option value="ISTP">ISTP</option>
+                        <option value="ESTP">ESTP</option>
+                        <option value="ESTJ">ESTJ</option>
+                        <option value="ISFJ">ISFJ</option>
+                        <option value="ISFP">ISFP</option>
+                        <option value="ESFP">ESFP</option>
+                        <option value="ESFJ">ESFJ</option>
+                        <option value="INFJ">INFJ</option>
+                        <option value="INFP">INFP</option>
+                        <option value="ENFP">ENFP</option>
+                        <option value="ENFJ">ENFJ</option>
+                        <option value="INTJ">INTJ</option>
+                        <option value="INTP">INTP</option>
+                        <option value="ENTP">ENTP</option>
+                        <option value="INTJ">ENTJ</option>
+                    </select>
 
-                        <p>Upload Resume</p>
-                        <input type="file" id="fileUpload">
+                    <p><a href="https://www.123test.com/disc-personality-test/" target="_blank">Take Disc Personality Test Here</a></p>
+                    <select id="disc">
+                        <option value="D">D</option>
+                        <option value="I">I</option>
+                        <option value="S">S</option>
+                        <option value="C">C</option>
+                    </select>
 
-                    </div>
+                    <p>Upload Resume</p>
+                    <input type="file" id="fileUpload">
+
                 </div>
+            </div>
 
 
-                <button id="create" type="button" onclick="createNewAccount()">Create Account</button>
+            <button id="create" type="button" onclick="createNewAccount()">Create Account</button>
 
-            </form>
+        </form>
+    </div>
+    <form class="listMentee">
+        <div id="menteeDiv" style="display:none">
+            <ul id="mentees"></ul>
         </div>
+        <div id="fullMentee" style=" display:none">
+            <h3 id="fullname"></h3>
+            <h3 id="job"></h3>
+            <hr />
+            <div style="float: left;">
+                <h4>Myers Briggs</h4>
+                <hr />
+                <p id="mb"></p>
+            </div>
+            <div style="float: right;">
+                <h4>DISC</h4>
+                <hr />
+                <p id="disc"></p>
+            </div>
+            <div style="clear: both;">
+                <a id="email"></a>
+                <div id="buttonDiv">
+
+                </div>
+            </div>
+        </div>
+    </form>
 </body>
 </html>

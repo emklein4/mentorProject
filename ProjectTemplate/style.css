@@ -248,7 +248,10 @@ li a {
 
     #Ment2BId:hover {
         cursor: pointer;
+        width: 300px;
+        background: #BF9B7A;
     }
+
 
 .navBar {
     float: right;
@@ -256,6 +259,11 @@ li a {
     padding-right: 5px;
     text-transform: uppercase;
 }
+    .navBar a:hover {
+        width: 300px;
+        background: #BF9B7A;
+    }
+
 
 #Profile {
     width: 700px;
@@ -327,6 +335,7 @@ li a {
             color: #39dc79;
         }
 
+
 /*.buttons {
             background-color: #8C1D40;
             color: white;
@@ -369,4 +378,28 @@ li a {
     position: absolute;
     top: -50px;
     left: calc(50% - 50px);
+}
+
+#menteeDiv {
+    width: 50%;
+    height: 90vh;
+    float: left;
+    overflow-y: auto;
+    background-color: white;
+    padding-top: 4px;
+    border: 2px solid #035373;
+}
+
+
+.mentee {
+    display: block;
+    background-color: #BF9B7A;
+    padding: 2px;
+}
+
+#fullMentee {
+    width: 40%;
+    height: 90vh;
+    float: left;
+    display: none;
 }
