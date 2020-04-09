@@ -330,10 +330,10 @@ namespace ProjectTemplate
         }
         
         [WebMethod(EnableSession = true)]
-        public void RequestMentee(string menteeId, string message=null)
+        public void RequestMentee(string menteeId, string message="")
         {
             string sqlSelect = string.Empty;
-            if (message != null)
+            if (message != "")
             {
                 sqlSelect = "insert into requests(StaffId, MentorId, request) values(@menteeValue, @mentorValue, @messageValue);";
             }
@@ -375,7 +375,7 @@ namespace ProjectTemplate
 
             DataTable sqlDt = new DataTable("staff");
             string sqlSelect = "select Staff.StaffId, FirstName, LastName, Department, StaffTitle, myerBriggs, disc, request from Staff left join requests " +
-                "on Staff.StaffId = requests.StaffId where Staff.StaffId in (select MentorId from requests where StaffId = @uidvalue and " +
+                "on Staff.StaffId = requests.MentorId where Staff.StaffId in (select MentorId from requests where StaffId = @uidvalue and " +
                 "status = 'Pending');";
 
             MySqlConnection sqlConnection = new MySqlConnection(getConString());

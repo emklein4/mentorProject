@@ -219,6 +219,7 @@ function MentorProfile() {
             c.style.display = "none";
             var d = document.getElementById("Profile");
             d.style.display = "block";
+            document.getElementById('menteeArea').style.display = "block";
             var e = document.getElementsByTagName("input")
             e.disabled = true;
 
@@ -299,11 +300,11 @@ function loadRequests() {
         success: function (msg) {
             mentorRequests = msg.d;
             console.log(mentorRequests);
-            var stmt
+            var stmt = '';
             for (var i = 0; i < mentorRequests.length; i++) {
-                stmt = stmt + '<li id="' + i + '"onclick=moreInfo(' + i + ')><h3>' + mentorRequests[i].fname +
-                    ' ' + mentorRequests[i].lname + '</h3><button onclick="acceptRequest(' + mentorRequests[i].id +
-                    ')">Acccept</button><button onclick="rejectRequest((' + mentorRequests[i].id + ')">Reject</button></li>';
+                stmt = stmt + '<li id="' + i + '"><h3><a onclick="moreInfo(' + i +  ')">' + mentorRequests[i].fname +
+                    ' ' + mentorRequests[i].lname + '</a></h3><button onclick="acceptRequest(' + mentorRequests[i].id +
+                    ')">Acccept</button><button onclick="rejectRequest(' + mentorRequests[i].id + ')">Reject</button></li>';
 
             }
             document.getElementById('mentorList').innerHTML = stmt;
@@ -315,7 +316,6 @@ function loadRequests() {
 }
 
 function moreInfo(index) {
-    var Requests;
     var webMethod = "ProjectServices.asmx/LoadRequests";
     var parameters = "{}";
 
@@ -326,19 +326,20 @@ function moreInfo(index) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (msg) {
-            Requests = msg.d;
+            var Requests = msg.d;
             console.log(Requests);
+            let li = document.getElementById(index);
+            let p = document.createElement('p');
+
+            console.log(Requests[index].request);
+            p.innerHTML = 'Message from User: ' + Requests[index].request;
+            li.appendChild(p);
         },
         error: function (e) {
             alert("this code will only execute if javascript is unable to access the webservice");
         }
     });
-
-    let li = document.getElementById(index);
-    let p = document.createElement('p');
-
-    p.innerHTML = 'Message from User: ' + Requests[index].request;
-    li.appendChild(p);
+    
 }
 
 function acceptRequest(id) {
