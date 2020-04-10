@@ -35,7 +35,7 @@
             <li class="navBar"><a href="mentees.html">Connect</a></li>
             <li class="navBar" onclick="loadProfile()"><a href="#">My Profile</a></li>
             <li class="navBar" onclick="MenteeProfile()"><a href="#">My Mentee</a></li>
-            <li class="navBar" onclick="MentorProfile()" data-badge="27"><a href="#">My Mentor</a></li>
+            <li class="navBar" onclick="MentorProfile()"><a id="mentorPage" href="#">My Mentor</a></li>
             
         </ul>
     </div>
@@ -46,6 +46,12 @@
 
         <div id="Profile" style="display: none">
             <a id="logoImage" title="Mentor/ Mentee Program Logo"><img src="logo.png" class="avator"><br /></a>
+            <div id="menteeArea">
+                <h2 id="mentorHeading"></h2>
+                <ul id="mentorList">
+
+                </ul>
+            </div>
 
             <form>
                 <div class="split left">

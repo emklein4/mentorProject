@@ -308,6 +308,10 @@ function loadRequests() {
 
             }
             document.getElementById('mentorList').innerHTML = stmt;
+            if (mentorRequests.length > 0) {
+                document.getElementById('mentorPage').innerhtml = mentorRequests.length + " New Mentor Requests!";
+                document.getElementById('mentorHeading').innerHTML = "New Mentor Requests!";
+            }
         },
         error: function (e) {
             alert("this code will only execute if javascript is unable to access the webservice");
