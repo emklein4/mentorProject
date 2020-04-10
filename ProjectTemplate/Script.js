@@ -340,8 +340,8 @@ function loadMentees() {
 }
 
 
-function connectMentee(id) {
-    var webMethod = "ProjectServices.asmx/ConnectMentee";
+function loadRequests() {
+    var webMethod = "ProjectServices.asmx/LoadRequests";
     var parameters = "{\"menteeId\":\"" + encodeURI(id) + "\"}";
 
     $.ajax({
