@@ -1,6 +1,8 @@
 // JavaScript source code
 var activeID;
 var activeUser;
+var mentorRequests;
+
 function TestButtonHandler() {
     var webMethod = "ProjectServices.asmx/TestConnection";
     var parameters = "{}";
@@ -89,6 +91,7 @@ function LogOn(email, pass) {
                 //var x = document.getElementById("buttonsID");
                 //location.replace("homepage.html");
                 LoadUser();
+                loadRequests();
                 //var y = document.getElementById("Logon");
                 //y.style.display = "none";
 
@@ -134,6 +137,7 @@ function LoadUser() {
             y.style.display = "block";
             var z = document.getElementById("iFrame");
             z.style.display = "block";
+            document.getElementById('menteeArea').style.display = "block";
             var q = document.getElementById("Profile");
             q.style.display = "none";
 
@@ -219,6 +223,7 @@ function MentorProfile() {
             c.style.display = "none";
             var d = document.getElementById("Profile");
             d.style.display = "block";
+            document.getElementById('menteeArea').style.display = "block";
             var e = document.getElementsByTagName("input")
             e.disabled = true;
             var z = document.getElementById("menteeDiv");
@@ -331,9 +336,6 @@ function loadMentees() {
             console.log(e.responseText);
         }
     });
-    connectMentee();
-    fullMentee();
-
    
 }
 
@@ -348,12 +350,51 @@ function connectMentee(id) {
         data: parameters,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function () {
-            alert("found and ran webmethod");
+        success: function (msg) {
+            mentorRequests = msg.d;
+            console.log(mentorRequests);
+            var stmt = '';
+            for (var i = 0; i < mentorRequests.length; i++) {
+                stmt = stmt + '<li id="' + i + '"><h3><a onclick="moreInfo(' + i +  ')">' + mentorRequests[i].fname +
+                    ' ' + mentorRequests[i].lname + '</a></h3><button onclick="acceptRequest(' + mentorRequests[i].id +
+                    ')">Acccept</button><button onclick="rejectRequest(' + mentorRequests[i].id + ')">Reject</button></li>';
+
+            }
+            document.getElementById('mentorList').innerHTML = stmt;
+            if (mentorRequests.length > 0) {
+                document.getElementById('mentorPage').innerhtml = mentorRequests.length + " New Mentor Requests!";
+                document.getElementById('mentorHeading').innerHTML = "New Mentor Requests!";
+            }
         },
         error: function (e) {
             alert("this code will only execute if javascript is unable to access the webservice");
-            console.log(e.responseText);
+        }
+    });
+}
+
+function moreInfo(index) {
+    var webMethod = "ProjectServices.asmx/LoadRequests";
+    var parameters = "{}";
+
+    //jQuery ajax method
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {
+            var Requests = msg.d;
+            console.log(Requests);
+            let li = document.getElementById(index);
+            let p = document.createElement('p');
+
+            console.log(Requests[index].request);
+            p.innerHTML = 'Message from User: ' + Requests[index].request;
+            li.appendChild(p);
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
         }
     });
 }
@@ -397,13 +438,52 @@ function fullMentee(index) {
             buttonDiv = document.getElementById('buttonDiv');
             buttonDiv.innerHTML = '<button type="button" onclick="connectMentee(' + availableMentees[index].id + ')">Connect with ' +
                 availableMentees[index].fname + '</button>';
-        }
-
-        ,
+        },
         error: function (e) {
             alert("this code will only execute if javascript is unable to access the webservice");
             console.log(e.responseText);
         }
     });
+    
+}
 
+function acceptRequest(id) {
+    var webMethod = "ProjectServices.asmx/AcceptRequest";
+    var parameters = "{\"mentorId\":\"" + encodeURI(id) + "\"}";
+
+    //jQuery ajax method
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function () {
+            alert('ran webmethod at least');
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+        }
+    });
+
+}
+
+function rejectRequest(id) {
+    var webMethod = "ProjectServices.asmx/RejectRequest";
+    var parameters = "{\"mentorId\":\"" + encodeURI(id) + "\"}";
+
+    //jQuery ajax method
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function () {
+            alert('ran webmethod at least');
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+        }
+    });
 }
