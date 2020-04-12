@@ -187,7 +187,8 @@ function loadProfile() {
             document.getElementById("role").value = activeUser.role;
             document.getElementById("myers").value = activeUser.mb;
             document.getElementById("disc").value = activeUser.disc;
-
+            document.getElementById("resume").setAttribute("href", activeUser.resume);
+            document.getElementById("linkedin").setAttribute("href", activeUser.linkedin);
 
         },
         error: function (e) {
@@ -239,7 +240,8 @@ function MentorProfile() {
             document.getElementById("role").value = mentor.role;
             document.getElementById("myers").value = mentor.mb;
             document.getElementById("disc").value = mentor.disc;
-            
+            document.getElementById("resume").setAttribute("href", mentor.resume);
+            document.getElementById("linkedin").setAttribute("href", mentor.linkedin);
 
         },
         error: function (e) {
@@ -289,7 +291,8 @@ function MenteeProfile() {
             document.getElementById("role").value = mentee.role;
             document.getElementById("myers").value = mentee.mb;
             document.getElementById("disc").value = mentee.disc;
-
+            document.getElementById("resume").setAttribute("href", mentee.resume);
+            document.getElementById("linkedin").setAttribute("href", mentee.linkedin);
         },
         error: function (e) {
             console.log(e.responseText);

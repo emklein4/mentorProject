@@ -169,7 +169,9 @@ namespace ProjectTemplate
                 department = sqlDt.Rows[0]["Department"].ToString(),
                 role = sqlDt.Rows[0]["Department"].ToString(),
                 mb = sqlDt.Rows[0]["myerBriggs"].ToString(),
-                disc = sqlDt.Rows[0]["disc"].ToString()
+                disc = sqlDt.Rows[0]["disc"].ToString(),
+                resume = sqlDt.Rows[0]["resume"].ToString(),
+                linkedin = sqlDt.Rows[0]["LinkedIn"].ToString()
             };
             //convert the list of accounts to an array and return!
             return activeUser;
@@ -215,7 +217,9 @@ namespace ProjectTemplate
                 department = sqlDt.Rows[0]["Department"].ToString(),
                 role = sqlDt.Rows[0]["StaffTitle"].ToString(),
                 mb = sqlDt.Rows[0]["myerBriggs"].ToString(),
-                disc = sqlDt.Rows[0]["disc"].ToString()
+                disc = sqlDt.Rows[0]["disc"].ToString(),
+                resume = sqlDt.Rows[0]["resume"].ToString(),
+                linkedin = sqlDt.Rows[0]["LinkedIn"].ToString()
             };
             //convert the list of accounts to an array and return!
             return mentor;
@@ -248,7 +252,9 @@ namespace ProjectTemplate
                 department = sqlDt.Rows[0]["Department"].ToString(),
                 role = sqlDt.Rows[0]["StaffTitle"].ToString(),
                 mb = sqlDt.Rows[0]["myerBriggs"].ToString(),
-                disc = sqlDt.Rows[0]["disc"].ToString()
+                disc = sqlDt.Rows[0]["disc"].ToString(),
+                resume = sqlDt.Rows[0]["resume"].ToString(),
+                linkedin = sqlDt.Rows[0]["LinkedIn"].ToString()
             };
             //convert the list of accounts to an array and return!
             return mentee;
