@@ -150,11 +150,9 @@ namespace ProjectTemplate
             //Keeps everything simple.
 
             //WE ONLY SHARE ACCOUNTS WITH LOGGED IN USERS!
-            if (Session["id"] != null)
-            {
                 DataTable sqlDt = new DataTable("accounts");
 
-                string sqlSelect = "select StaffId, LastName, FirstName, email, password, Department, StaffTitle, MentorId, myerBriggs, disc, Resume, LinkedIn from Staff order by LastName";
+                string sqlSelect = "select StaffId, LastName, FirstName, email, password, Department, StaffTitle, MentorId, myerBriggs, disc, Resume, LinkedIn from Staff order by LastName;";
 
                 MySqlConnection sqlConnection = new MySqlConnection(getConString());
                 MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -170,34 +168,25 @@ namespace ProjectTemplate
                 List<Staff> accounts = new List<Staff>();
                 for (int i = 0; i < sqlDt.Rows.Count; i++)
                 {
-                    //only share user id and pass info with admins!
-                    if (Convert.ToInt32(Session["Admin"]) == 1)
-                    {
                         accounts.Add(new Staff
                         {
                             id = sqlDt.Rows[i]["StaffId"].ToString(),
-                            fname = sqlDt.Rows[0]["FirstName"].ToString(),
-                            lname = sqlDt.Rows[0]["LastName"].ToString(),
-                            email = sqlDt.Rows[0]["Email"].ToString(),
-                            pass = sqlDt.Rows[0]["password"].ToString(),
-                            department = sqlDt.Rows[0]["Department"].ToString(),
-                            role = sqlDt.Rows[0]["Department"].ToString(),
-                            mb = sqlDt.Rows[0]["myerBriggs"].ToString(),
-                            disc = sqlDt.Rows[0]["disc"].ToString(),
-                            resume = sqlDt.Rows[0]["resume"].ToString(),
-                            linkedin = sqlDt.Rows[0]["LinkedIn"].ToString(),
-                            mid = sqlDt.Rows[0]["MentorId"].ToString()
+                            fname = sqlDt.Rows[i]["FirstName"].ToString(),
+                            lname = sqlDt.Rows[i]["LastName"].ToString(),
+                            email = sqlDt.Rows[i]["Email"].ToString(),
+                            pass = sqlDt.Rows[i]["password"].ToString(),
+                            department = sqlDt.Rows[i]["Department"].ToString(),
+                            role = sqlDt.Rows[i]["StaffTitle"].ToString(),
+                            mb = sqlDt.Rows[i]["myerBriggs"].ToString(),
+                            disc = sqlDt.Rows[i]["disc"].ToString(),
+                            resume = sqlDt.Rows[i]["resume"].ToString(),
+                            linkedin = sqlDt.Rows[i]["LinkedIn"].ToString(),
+                            mid = sqlDt.Rows[i]["MentorId"].ToString()
                         });
-                    }
                 }
                 //convert the list of accounts to an array and return!
                 return accounts.ToArray();
-            }
-            else
-            {
-                //if they're not logged in, return an empty array
-                return new Staff[0];
-            }
+
         }
 
 

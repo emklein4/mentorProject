@@ -93,7 +93,6 @@ function LogOn(email, pass) {
                 
                 LoadUser();
                 loadRequests();
-                LoadAccounts();
                 
                 
                 //var y = document.getElementById("Logon");
@@ -356,7 +355,7 @@ function loadMentees() {
 
 function loadRequests() {
     var webMethod = "ProjectServices.asmx/LoadRequests";
-    var parameters = "{\"menteeId\":\"" + encodeURI(id) + "\"}";
+    var parameters = "{}";
 
     $.ajax({
         type: "POST",
@@ -503,93 +502,92 @@ function rejectRequest(id) {
 }
 
 
-function LoadAccounts() {
-var webMethod = "ProjectServices.asmx/GetAccounts";
-$.ajax({
-    type: "POST",
-    url: webMethod,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    success: function (msg) {
-        if (msg.d.length > 0) {
-            //let's put our accounts that we get from the
-            //server into our accountsArray variable
-            //so we can use them in other functions as well
-            accountsArray = msg.d;
-            //this clears out the div that will hold our account info
-            $("#admin").empty();
-            //again, we assume we're not an admin unless we see data from the server
-            //that we know only admins can see
-            admin = false;
+function getAccounts() {
+    console.log("in function");
+    var webMethod = "ProjectServices.asmx/GetAccounts";
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {
+            console.log(msg.d);
+            if (msg.d.length > 0) {
+                //let's put our accounts that we get from the
+                //server into our accountsArray variable
+                //so we can use them in other functions as well
+                var accountsArray = msg.d;
+                console.log(accountsArray);
+                //this clears out the div that will hold our account info
+                $("#admin").empty();
+                //again, we assume we're not an admin unless we see data from the server
+                //that we know only admins can see
+                admin = false;
         
-            var labels = "<table class = 'labelTable'><th><td>" + "Staff Id" + "</td>" + "<td>" + "Last Name " + "</td>" + "<td>" + "First Name" + "</td>" + "<td>" + "Email" + "</td>" + "<td>" + "Password" + "</td>" + "<td>" + "Deparment" + "</td>" + "<td>" + "Staff Title" + "</td>" + "<td>" + "Mentor ID" + "</td>" + "<td>" + "Myer Briggs" + "</td>" + "<td>" + "DISC" + "</td>" +"</th></table>";
-            $("#admin").append(
-                //anything we throw at our panel in the form of text
-                //will be added to the contents of that panel.  Here
-                //we're putting together a div that holds info on the
-                //account as well as an edit link if the user is an admin
-                labels
-            );
+                var labels = "<table class = 'labelTable'><th><td>" + "Staff Id" + "</td>" + "<td>" + "Last Name " + "</td>" + "<td>" + "First Name" + "</td>" + "<td>" + "Email" + "</td>" + "<td>" + "Password" + "</td>" + "<td>" + "Deparment" + "</td>" + "<td>" + "Staff Title" + "</td>" + "<td>" + "Mentor ID" + "</td>" + "<td>" + "Myer Briggs" + "</td>" + "<td>" + "DISC" + "</td>" +"</th></table>";
+                $("#admin").append(labels);
 
-            for (var i = 0; i < accountsArray.length; i++) {
-                //we grab on to a specific html element in jQuery
-                //by using a  # followed by that element's id.
-                //if they have access to admin-level info (like userid and password) then
-                //create output that has an edit option
-                if (accountsArray[i].id != null) {
-                    acct = "<div class='accountRow' id='acct" + accountsArray[i].id + "'>" + " " + "<table class = 'accountTable'>"
-                        + "<td>" + accountsArray[i].id + "</td>" + "<td>" + accountsArray[i].lname + "</td>" + "<td>" + accountsArray[i].fname + "</td>" +
-                        "<td>" + accountsArray[i].email + "</td> " + "<td>" + accountsArray[i].pass + "</td>" +
-                        "<td>" + accountsArray[i].department + "</td>" + "<td>" + accountsArray[i].role + "</td>" +
-                        "<td>" + accountsArray[i].mid + "</td>" + "<td>" + accountsArray[i].mb + "</td>" +
-                        "<td>" + accountsArray[i].disc + "</td>" + "</table></div>"
-                    console.log(accountsArray[i].username)
-                    admin = true;
-                }
-                else {
-                    " "
-                }
+                console.log('right before for loop');
+                for (var i = 0; i < accountsArray.length; i++) {
+                    console.log('in for loop');
+                    //we grab on to a specific html element in jQuery
+                    //by using a  # followed by that element's id.
+                    //if they have access to admin-level info (like userid and password) then
+                    //create output that has an edit option
+                    if (accountsArray[i].id != null) {
+                        acct = "<div class='accountRow' id='acct" + accountsArray[i].id + "'>" + " " + "<table class = 'accountTable'>"
+                            + "<td>" + accountsArray[i].id + "</td>" + "<td>" + accountsArray[i].lname + "</td>" + "<td>" + accountsArray[i].fname + "</td>" +
+                            "<td>" + accountsArray[i].email + "</td> " + "<td>" + accountsArray[i].pass + "</td>" +
+                            "<td>" + accountsArray[i].department + "</td>" + "<td>" + accountsArray[i].role + "</td>" +
+                            "<td>" + accountsArray[i].mid + "</td>" + "<td>" + accountsArray[i].mb + "</td>" +
+                            "<td>" + accountsArray[i].disc + "</td>" + "</table></div>"
+                        console.log(accountsArray[i].username)
+                        admin = true;
+                    }
+                    else {
+                        " "
+                    }
  
 
-                $("#admin").append(
-                    //anything we throw at our panel in the form of text
-                    //will be added to the contents of that panel.  Here
-                    //we're putting together a div that holds info on the
-                    //account as well as an edit link if the user is an admin
-                    acct
-                );
+                    $("#admin").append(
+                        //anything we throw at our panel in the form of text
+                        //will be added to the contents of that panel.  Here
+                        //we're putting together a div that holds info on the
+                        //account as well as an edit link if the user is an admin
+                        acct
+                    );
+                }
+                console.log(acct);
+                //if (admin) {
+                //    addNew = "<div class='accountRow' id='acct'>" + " " +
+                //        "<input type='text' placeholder='ISBN #...' id='isbnID' required>" + " " +
+                //        "<input type='text' placeholder='Title...' id='BookTitleID' required>" + " " +
+                //        "<input type='text' placeholder='Author...' id='authorID' required>" + " " +
+                //        "<input type='text' placeholder='Quantity...' id='quantityID' required>" + " " +
+                //        "</div>"
+                //    document.getElementById('addNew').style.display = "block";
+
+
+                //}
+                //else {
+                //    alert("Not an Admin");
+                //}
+
+                //$("#accountsBox").append(
+                //    //anything we throw at our panel in the form of text
+                //    //will be added to the contents of that panel.  Here
+                //    //we're putting together a div that holds info on the
+                //    //account as well as an edit link if the user is an admin
+                //    "<br>" + "<br>" + "<em>Add New Book</em>" +
+                //    addNew
+                //);
+
             }
-            console.log(acct);
-            //if (admin) {
-            //    addNew = "<div class='accountRow' id='acct'>" + " " +
-            //        "<input type='text' placeholder='ISBN #...' id='isbnID' required>" + " " +
-            //        "<input type='text' placeholder='Title...' id='BookTitleID' required>" + " " +
-            //        "<input type='text' placeholder='Author...' id='authorID' required>" + " " +
-            //        "<input type='text' placeholder='Quantity...' id='quantityID' required>" + " " +
-            //        "</div>"
-            //    document.getElementById('addNew').style.display = "block";
 
-
-            //}
-            //else {
-            //    alert("Not an Admin");
-            //}
-
-            //$("#accountsBox").append(
-            //    //anything we throw at our panel in the form of text
-            //    //will be added to the contents of that panel.  Here
-            //    //we're putting together a div that holds info on the
-            //    //account as well as an edit link if the user is an admin
-            //    "<br>" + "<br>" + "<em>Add New Book</em>" +
-            //    addNew
-            //);
-
+        },
+        error: function (e) {
+            alert("boo...");
         }
-
-    },
-    error: function (e) {
-        alert("boo...");
-    }
-});
+    });
 }
 
