@@ -262,11 +262,14 @@ li a {
         background: #BF9B7A;
         width:500px;
     }
+    .navBar a:active {
+        background: #403022;
+    }
     /*.navBar a.selected:active {
         background: #403022;
     }*/
 
-#NavigationBar a.selected:active {
+#NavigationBar a:active {
     background: #403022;
 }
 

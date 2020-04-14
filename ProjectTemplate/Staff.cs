@@ -19,6 +19,7 @@ namespace ProjectTemplate
         public string resume;
         public string linkedin;
         public string request;
+        public string mid;
 
     }
 }

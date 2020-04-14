@@ -140,6 +140,66 @@ namespace ProjectTemplate
 
         }
 
+        //EXAMPLE OF A SELECT, AND RETURNING "COMPLEX" DATA TYPES
+        [WebMethod(EnableSession = true)]
+        public Staff[] GetAccounts()
+        {
+            //check out the return type.  It's an array of Account objects.  You can look at our custom Account class in this solution to see that it's 
+            //just a container for public class-level variables.  It's a simple container that asp.net will have no trouble converting into json.  When we return
+            //sets of information, it's a good idea to create a custom container class to represent instances (or rows) of that information, and then return an array of those objects.  
+            //Keeps everything simple.
+
+            //WE ONLY SHARE ACCOUNTS WITH LOGGED IN USERS!
+            if (Session["id"] != null)
+            {
+                DataTable sqlDt = new DataTable("accounts");
+
+                string sqlSelect = "select StaffId, LastName, FirstName, email, password, Department, StaffTitle, MentorId, myerBriggs, disc, Resume, LinkedIn from Staff order by LastName";
+
+                MySqlConnection sqlConnection = new MySqlConnection(getConString());
+                MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+                //gonna use this to fill a data table
+                MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+                //filling the data table
+                sqlDa.Fill(sqlDt);
+
+                //loop through each row in the dataset, creating instances
+                //of our container class Account.  Fill each acciount with
+                //data from the rows, then dump them in a list.
+                List<Staff> accounts = new List<Staff>();
+                for (int i = 0; i < sqlDt.Rows.Count; i++)
+                {
+                    //only share user id and pass info with admins!
+                    if (Convert.ToInt32(Session["Admin"]) == 1)
+                    {
+                        accounts.Add(new Staff
+                        {
+                            id = sqlDt.Rows[i]["StaffId"].ToString(),
+                            fname = sqlDt.Rows[0]["FirstName"].ToString(),
+                            lname = sqlDt.Rows[0]["LastName"].ToString(),
+                            email = sqlDt.Rows[0]["Email"].ToString(),
+                            pass = sqlDt.Rows[0]["password"].ToString(),
+                            department = sqlDt.Rows[0]["Department"].ToString(),
+                            role = sqlDt.Rows[0]["Department"].ToString(),
+                            mb = sqlDt.Rows[0]["myerBriggs"].ToString(),
+                            disc = sqlDt.Rows[0]["disc"].ToString(),
+                            resume = sqlDt.Rows[0]["resume"].ToString(),
+                            linkedin = sqlDt.Rows[0]["LinkedIn"].ToString(),
+                            mid = sqlDt.Rows[0]["MentorId"].ToString()
+                        });
+                    }
+                }
+                //convert the list of accounts to an array and return!
+                return accounts.ToArray();
+            }
+            else
+            {
+                //if they're not logged in, return an empty array
+                return new Staff[0];
+            }
+        }
+
 
         [WebMethod(EnableSession = true)]
         public Staff LoadUser(string ID)
@@ -171,12 +231,18 @@ namespace ProjectTemplate
                 mb = sqlDt.Rows[0]["myerBriggs"].ToString(),
                 disc = sqlDt.Rows[0]["disc"].ToString(),
                 resume = sqlDt.Rows[0]["resume"].ToString(),
-                linkedin = sqlDt.Rows[0]["LinkedIn"].ToString()
+                linkedin = sqlDt.Rows[0]["LinkedIn"].ToString(),
+                mid = sqlDt.Rows[0]["MentorId"].ToString()
+
+
             };
             //convert the list of accounts to an array and return!
             return activeUser;
 
+
         }
+
+
         [HttpGet]
         [WebMethod]
         public async Task<string> GetAsync(string uri)
