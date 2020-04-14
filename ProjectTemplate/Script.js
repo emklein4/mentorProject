@@ -405,6 +405,15 @@ function moreInfo(index) {
             console.log(Requests[index].request);
             p.innerHTML = 'Message from User: ' + Requests[index].request;
             li.appendChild(p);
+
+            document.getElementById("fname").value = Requests[index].fname;
+            document.getElementById("lname").value = Requests[index].lname;
+            document.getElementById("dep").value = Requests[index].department;
+            document.getElementById("role").value = Requests[index].role;
+            document.getElementById("myers").value = Requests[index].mb;
+            document.getElementById("disc").value = Requests[index].disc;
+            document.getElementById("resume").setAttribute("href", Requests[index].resume);
+            document.getElementById("linkedin").setAttribute("href", Requests[index].linkedin);
         },
         error: function (e) {
             alert("this code will only execute if javascript is unable to access the webservice");

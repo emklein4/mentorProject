@@ -435,7 +435,7 @@ namespace ProjectTemplate
         {
 
             DataTable sqlDt = new DataTable("staff");
-            string sqlSelect = "select Staff.StaffId, FirstName, LastName, Department, StaffTitle, myerBriggs, disc, request from Staff left join requests " +
+            string sqlSelect = "select distinct Staff.StaffId, FirstName, LastName, Department, StaffTitle, myerBriggs, disc, request from Staff left join requests " +
                 "on Staff.StaffId = requests.MentorId where Staff.StaffId in (select MentorId from requests where StaffId = @uidvalue and " +
                 "status = 'Pending');";
 
