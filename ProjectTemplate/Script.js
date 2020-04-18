@@ -142,6 +142,14 @@ function LoadUser() {
             document.getElementById('menteeArea').style.display = "block";
             var q = document.getElementById("Profile");
             q.style.display = "none";
+            var admin = document.getElementById('admin');
+            admin.style.display = "none";
+            document.getElementById('adRequests').style.display = "none";
+            document.getElementById('adHeading').style.display = "none";
+            var z = document.getElementById("menteeDiv");
+            z.style.display = "none";
+            var m = document.getElementById("fullMentee");
+            m.style.display = "none";
 
             if (activeUser.id == "115") {
                 var a = document.getElementById("adminNav");
@@ -196,6 +204,10 @@ function loadProfile() {
             z.style.display = "none";
             var m = document.getElementById("fullMentee");
             m.style.display = "none";
+            var admin = document.getElementById("admin");
+            admin.style.display = "none";
+            document.getElementById('adRequests').style.display = "none";
+            document.getElementById('adHeading').style.display = "none";
 
             document.getElementById("fname").value = activeUser.fname;
             document.getElementById("lname").value = activeUser.lname;
@@ -249,6 +261,10 @@ function MentorProfile() {
             z.style.display = "none";
             var m = document.getElementById("fullMentee");
             m.style.display = "none";
+            var admin = document.getElementById("admin");
+            admin.style.display = "none";
+            document.getElementById('adRequests').style.display = "none";
+            document.getElementById('adHeading').style.display = "none";
 
             document.getElementById("fname").value = mentor.fname;
             document.getElementById("lname").value = mentor.lname;
@@ -300,6 +316,10 @@ function MenteeProfile() {
             z.style.display = "none";
             var m = document.getElementById("fullMentee");
             m.style.display = "none";
+            var admin = document.getElementById("admin");
+            admin.style.display = "none";
+            document.getElementById('adRequests').style.display = "none";
+            document.getElementById('adHeading').style.display = "none";
 
             document.getElementById("fname").value = mentee.fname;
             document.getElementById("lname").value = mentee.lname;
@@ -339,6 +359,10 @@ function loadMentees() {
             z.style.display = "block";
             var m = document.getElementById("fullMentee");
             m.style.display = "block";
+            var admin = document.getElementById("admin");
+            admin.style.display = "none";
+            document.getElementById('adRequests').style.display = "none";
+            document.getElementById('adHeading').style.display = "none";
            
 
             var availableMentees = mentees.d;
@@ -554,9 +578,10 @@ function adminRequests() {
         success: function (msg) {
             mentorReq = msg.d;
             console.log(mentorReq);
+            document.getElementById('adRequests').style.display = "block";
+            document.getElementById('adHeading').style.display = "block";
             var stmt = '';
-            var ad = document.getElementById('adRequests');
-    
+            ad = document.getElementById('adRequests');
 
             for (var i = 0; i < mentorReq.length; i++) {
                 stmt = stmt + '<li id="' + i + '">' + ' ' + mentorReq[i].fname + ' ' + mentorReq[i].lname + '</h3><button onclick="acceptMentorRequest()">Acccept</button><button onclick="rejectMentorRequest()">Reject</button></li>';
@@ -641,6 +666,12 @@ function getAccounts() {
                 a.style.display = "none";
                 var b = document.getElementById('report');
                 b.style.display = "none";
+                var c = document.getElementById('admin');
+                c.style.display = "block";
+                var z = document.getElementById("menteeDiv");
+                z.style.display = "none";
+                var m = document.getElementById("fullMentee");
+                m.style.display = "none";
                 //again, we assume we're not an admin unless we see data from the server
                 //that we know only admins can see
                 admin = false;
