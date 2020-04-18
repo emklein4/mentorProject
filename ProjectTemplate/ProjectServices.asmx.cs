@@ -152,7 +152,7 @@ namespace ProjectTemplate
             //WE ONLY SHARE ACCOUNTS WITH LOGGED IN USERS!
                 DataTable sqlDt = new DataTable("accounts");
 
-                string sqlSelect = "select StaffId, LastName, FirstName, email, password, Department, StaffTitle, MentorId, myerBriggs, disc, Resume, LinkedIn from Staff order by LastName;";
+                string sqlSelect = "select StaffId, LastName, FirstName, email, password, Department, StaffTitle, MentorId, myerBriggs, disc, Resume, LinkedIn, Mentor from Staff order by LastName;";
 
                 MySqlConnection sqlConnection = new MySqlConnection(getConString());
                 MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -181,7 +181,8 @@ namespace ProjectTemplate
                             disc = sqlDt.Rows[i]["disc"].ToString(),
                             resume = sqlDt.Rows[i]["resume"].ToString(),
                             linkedin = sqlDt.Rows[i]["LinkedIn"].ToString(),
-                            mid = sqlDt.Rows[i]["MentorId"].ToString()
+                            mid = sqlDt.Rows[i]["MentorId"].ToString(),
+                            mentorStatus = sqlDt.Rows[i]["Mentor"].ToString()
                         });
                 }
                 //convert the list of accounts to an array and return!
@@ -221,7 +222,8 @@ namespace ProjectTemplate
                 disc = sqlDt.Rows[0]["disc"].ToString(),
                 resume = sqlDt.Rows[0]["resume"].ToString(),
                 linkedin = sqlDt.Rows[0]["LinkedIn"].ToString(),
-                mid = sqlDt.Rows[0]["MentorId"].ToString()
+                mid = sqlDt.Rows[0]["MentorId"].ToString(),
+                mentorStatus = sqlDt.Rows[0]["Mentor"].ToString()
 
 
             };
@@ -274,7 +276,8 @@ namespace ProjectTemplate
                 mb = sqlDt.Rows[0]["myerBriggs"].ToString(),
                 disc = sqlDt.Rows[0]["disc"].ToString(),
                 resume = sqlDt.Rows[0]["resume"].ToString(),
-                linkedin = sqlDt.Rows[0]["LinkedIn"].ToString()
+                linkedin = sqlDt.Rows[0]["LinkedIn"].ToString(),
+                mentorStatus = sqlDt.Rows[0]["Mentor"].ToString()
             };
             //convert the list of accounts to an array and return!
             return mentor;
@@ -309,7 +312,8 @@ namespace ProjectTemplate
                 mb = sqlDt.Rows[0]["myerBriggs"].ToString(),
                 disc = sqlDt.Rows[0]["disc"].ToString(),
                 resume = sqlDt.Rows[0]["resume"].ToString(),
-                linkedin = sqlDt.Rows[0]["LinkedIn"].ToString()
+                linkedin = sqlDt.Rows[0]["LinkedIn"].ToString(),
+                mentorStatus = sqlDt.Rows[0]["Mentor"].ToString()
             };
             //convert the list of accounts to an array and return!
             return mentee;
@@ -382,7 +386,8 @@ namespace ProjectTemplate
                     department = sqlDt.Rows[i]["Department"].ToString(),
                     role = sqlDt.Rows[i]["StaffTitle"].ToString(),
                     mb = sqlDt.Rows[i]["myerBriggs"].ToString(),
-                    disc = sqlDt.Rows[i]["disc"].ToString()
+                    disc = sqlDt.Rows[i]["disc"].ToString(),
+                    mentorStatus = sqlDt.Rows[i]["Mentor"].ToString()
                 });
             }
             //convert the list of accounts to an array and return!
@@ -538,5 +543,144 @@ namespace ProjectTemplate
             con.Close();
 
         }
+
+
+        [WebMethod(EnableSession = true)]
+        public void RequestBecomeMentor()
+        {
+            string sqlSelect = string.Empty;
+
+            sqlSelect = "insert into mentorRequests(StaffId) values (@potentialMentorValue);";
+
+            //set up our connection object to be ready to use our connection string
+            MySqlConnection con = new MySqlConnection(getConString());
+            //set up our command object to use our connection, and our query
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, con);
+
+            //tell our command to replace the @parameters with real values
+            //we decode them because they came to us via the web so they were encoded
+            //for transmission (funky characters escaped, mostly)
+            sqlCommand.Parameters.AddWithValue("@potentialMentorValue", HttpUtility.UrlDecode(GetSessionId()));
+
+
+            con.Open();
+            //we're using a try/catch so that if the query errors out we can handle it gracefully
+            //by closing the connection and moving on
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+            }
+            con.Close();
+        }
+
+        [WebMethod(EnableSession = true)]
+        public Staff[] LoadMentorRequests()
+        {
+
+            DataTable sqlDt = new DataTable("staff");
+            string sqlSelect = "select * from Staff JOIN mentorRequests ON Staff.StaffId = mentorRequests.StaffId AND mentorRequests.mstatus = 'Pending';";
+
+            MySqlConnection sqlConnection = new MySqlConnection(getConString());
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            sqlCommand.Parameters.AddWithValue("@uidvalue", GetSessionId());
+
+            //gonna use this to fill a data table
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            //filling the data table
+            sqlDa.Fill(sqlDt);
+
+            List<Staff> newMentors = new List<Staff>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                newMentors.Add(new Staff
+                {
+                    id = sqlDt.Rows[i]["StaffId"].ToString(),
+                    fname = sqlDt.Rows[i]["FirstName"].ToString(),
+                    lname = sqlDt.Rows[i]["LastName"].ToString(),
+                    department = sqlDt.Rows[i]["Department"].ToString(),
+                    role = sqlDt.Rows[i]["StaffTitle"].ToString(),
+                    mb = sqlDt.Rows[i]["myerBriggs"].ToString(),
+                    disc = sqlDt.Rows[i]["disc"].ToString(),
+                    mentorStatus = sqlDt.Rows[i]["Mentor"].ToString()
+                });
+            }
+            //convert the list of accounts to an array and return!
+            return newMentors.ToArray();
+        }
+
+        [WebMethod(EnableSession = true)]
+        public void AcceptMentorRequest()
+        {
+            string sqlUpdate = "update mentorRequests set mstatus = 'Accepted' where StaffId = @potentialMentorValue";
+
+            string sqlConnect = "update Staff set Mentor='1' where StaffId = @potentialMentorValue";
+
+            //set up our connection object to be ready to use our connection string
+            MySqlConnection con = new MySqlConnection(getConString());
+            //set up our command object to use our connection, and our query
+
+            MySqlCommand sqlCommand = new MySqlCommand(sqlUpdate, con);
+            MySqlCommand sqlCommand2 = new MySqlCommand(sqlConnect, con);
+
+
+            //tell our command to replace the @parameters with real values
+            //we decode them because they came to us via the web so they were encoded
+            //for transmission (funky characters escaped, mostly)
+            sqlCommand.Parameters.AddWithValue("@potentialMentorValue", HttpUtility.UrlDecode(GetSessionId()));
+            //sqlCommand.Parameters.AddWithValue("@mentorValue", HttpUtility.UrlDecode(mentorId));
+            sqlCommand2.Parameters.AddWithValue("@potentialMentorValue", HttpUtility.UrlDecode(GetSessionId()));
+            //sqlCommand2.Parameters.AddWithValue("@mentorValue", HttpUtility.UrlDecode(mentorId));
+
+
+            con.Open();
+            //we're using a try/catch so that if the query errors out we can handle it gracefully
+            //by closing the connection and moving on
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                sqlCommand2.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+            }
+            con.Close();
+
+        }
+
+        [WebMethod(EnableSession = true)]
+        public void RejectMentorRequest()
+        {
+            string sqlUpdate = " update mentorRequests set mstatus = 'Rejected' where StaffId = @potentialMentorValue;";
+
+            //set up our connection object to be ready to use our connection string
+            MySqlConnection con = new MySqlConnection(getConString());
+            //set up our command object to use our connection, and our query
+            MySqlCommand sqlCommand = new MySqlCommand(sqlUpdate, con);
+
+
+            //tell our command to replace the @parameters with real values
+            //we decode them because they came to us via the web so they were encoded
+            //for transmission (funky characters escaped, mostly)
+            sqlCommand.Parameters.AddWithValue("@potentialMentorValue", HttpUtility.UrlDecode(GetSessionId()));
+
+
+            con.Open();
+            //we're using a try/catch so that if the query errors out we can handle it gracefully
+            //by closing the connection and moving on
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+            }
+            con.Close();
+
+        }
+
     }
 }

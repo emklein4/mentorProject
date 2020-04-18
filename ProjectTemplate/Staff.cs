@@ -20,6 +20,6 @@ namespace ProjectTemplate
         public string linkedin;
         public string request;
         public string mid;
-
+        public string mentorStatus;
     }
 }

@@ -151,6 +151,14 @@ function LoadUser() {
                 var b = document.getElementById("adminNav");
                 b.style.display = "none";
             }
+            if (activeUser.mentorStatus != 1) {
+                var c = document.getElementById("requestMentor");
+                c.style.display = "block";
+            }
+            else {
+                var d = document.getElementById("requestMentor");
+                d.style.display = "none";
+            }
         },
         error: function (e) {
             console.log(e.responseText);
@@ -501,6 +509,106 @@ function rejectRequest(id) {
     });
 }
 
+function becomeMentor() {
+    var webMethod = "ProjectServices.asmx/RequestBecomeMentor";
+    var parameters = "{}";
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function () {
+            alert("Request Sent to Admin!");
+            console.log("Request sent to admin");
+            var a = document.getElementById('requestMentor');
+            a.innerHTML = "Pending Mentor Request";
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+            console.log(e.responseText);
+        }
+    });
+}
+
+// loads the requests on the admin side and will accept/reject
+function adminRequests() {
+    var webMethod = "ProjectServices.asmx/LoadMentorRequests";
+    var parameters = "{}";
+
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {
+            mentorReq = msg.d;
+            console.log(mentorReq);
+            var stmt = '';
+            var ad = document.getElementById('adRequests');
+    
+
+            for (var i = 0; i < mentorReq.length; i++) {
+                stmt = stmt + '<li id="' + i + '">' + ' ' + mentorReq[i].fname + ' ' + mentorReq[i].lname + '</h3><button onclick="acceptMentorRequest()">Acccept</button><button onclick="rejectMentorRequest()">Reject</button></li>';
+                console.log(mentorReq[i]);
+            }
+            console.log(stmt);
+            ad.innerHTML = stmt;
+
+            if (mentorReq.length > 0) {
+                document.getElementById('adRequests').innerhtml = mentorReq.length + " New Requests to be a Mentor";
+                document.getElementById('adHeading').innerHTML = "New Requests to be a Mentor";
+            }
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+        }
+    });
+}
+
+// admin accepts request from user to be a mentor and changes value of mentor in DB to 1
+function acceptMentorRequest() {
+    var webMethod = "ProjectServices.asmx/AcceptMentorRequest";
+    var parameters = "{}";
+
+    //jQuery ajax method
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function () {
+            alert('ran webmethod at least');
+
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+        }
+    });
+}
+
+function rejectMentorRequest() {
+    var webMethod = "ProjectServices.asmx/RejectMentorRequest";
+    var parameters = "{}";
+
+    //jQuery ajax method
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function () {
+            alert('ran webmethod at least');
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+        }
+    });
+}
+
 
 function getAccounts() {
     console.log("in function");
@@ -520,6 +628,10 @@ function getAccounts() {
                 console.log(accountsArray);
                 //this clears out the div that will hold our account info
                 $("#admin").empty();
+                var a = document.getElementById('iFrame');
+                a.style.display = "none";
+                var b = document.getElementById('report');
+                b.style.display = "none";
                 //again, we assume we're not an admin unless we see data from the server
                 //that we know only admins can see
                 admin = false;
@@ -558,32 +670,9 @@ function getAccounts() {
                     );
                 }
                 console.log(acct);
-                //if (admin) {
-                //    addNew = "<div class='accountRow' id='acct'>" + " " +
-                //        "<input type='text' placeholder='ISBN #...' id='isbnID' required>" + " " +
-                //        "<input type='text' placeholder='Title...' id='BookTitleID' required>" + " " +
-                //        "<input type='text' placeholder='Author...' id='authorID' required>" + " " +
-                //        "<input type='text' placeholder='Quantity...' id='quantityID' required>" + " " +
-                //        "</div>"
-                //    document.getElementById('addNew').style.display = "block";
-
-
-                //}
-                //else {
-                //    alert("Not an Admin");
-                //}
-
-                //$("#accountsBox").append(
-                //    //anything we throw at our panel in the form of text
-                //    //will be added to the contents of that panel.  Here
-                //    //we're putting together a div that holds info on the
-                //    //account as well as an edit link if the user is an admin
-                //    "<br>" + "<br>" + "<em>Add New Book</em>" +
-                //    addNew
-                //);
-
+                
             }
-
+            adminRequests();
         },
         error: function (e) {
             alert("boo...");

@@ -36,6 +36,7 @@
             <li class="navBar" onclick="loadProfile()"><a href="#">My Profile</a></li>
             <li class="navBar" onclick="MenteeProfile()"><a href="#">My Mentee</a></li>
             <li class="navBar" onclick="MentorProfile()"><a id="mentorPage" href="#">My Mentor</a></li>
+            <li class="navBar" onclick="becomeMentor()" id="requestMentor" style="display:none"><a href="#">Click To Request Admin to be Mentor</a></li>
             <li class="navBar" onclick="getAccounts()" id="adminNav" style="display:none"><a href="#">List of Users</a></li>
         </ul>
     </div>
@@ -48,7 +49,12 @@
     </div>
     <div id="admin">
         <div id="listAcc"></div>
+
     </div>
+    <h2 id="adHeading"></h2>
+    <div id="adRequests"></div>
+
+
     <div id="Profile" style="display: none">
         <a id="logoImage" title="Mentor/ Mentee Program Logo"><img src="logo.png" class="avator"><br /></a>
         <div id="menteeArea">
