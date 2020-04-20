@@ -363,7 +363,7 @@ namespace ProjectTemplate
         {
 
             DataTable sqlDt = new DataTable("staff");
-            string sqlSelect = "select * from Staff where MentorId is null and Mentor=0;";
+            string sqlSelect = "select * from Staff where MentorId is null or Mentor=0;";
 
             MySqlConnection sqlConnection = new MySqlConnection(getConString());
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -611,9 +611,10 @@ namespace ProjectTemplate
             //convert the list of accounts to an array and return!
             return newMentors.ToArray();
         }
+        
 
         [WebMethod(EnableSession = true)]
-        public void AcceptMentorRequest()
+        public void AcceptMentorRequest(string ID)
         {
             string sqlUpdate = "update mentorRequests set mstatus = 'Accepted' where StaffId = @potentialMentorValue";
 
@@ -630,9 +631,9 @@ namespace ProjectTemplate
             //tell our command to replace the @parameters with real values
             //we decode them because they came to us via the web so they were encoded
             //for transmission (funky characters escaped, mostly)
-            sqlCommand.Parameters.AddWithValue("@potentialMentorValue", HttpUtility.UrlDecode(GetSessionId()));
+            sqlCommand.Parameters.AddWithValue("@potentialMentorValue", HttpUtility.UrlDecode(ID));
             //sqlCommand.Parameters.AddWithValue("@mentorValue", HttpUtility.UrlDecode(mentorId));
-            sqlCommand2.Parameters.AddWithValue("@potentialMentorValue", HttpUtility.UrlDecode(GetSessionId()));
+            sqlCommand2.Parameters.AddWithValue("@potentialMentorValue", HttpUtility.UrlDecode(ID));
             //sqlCommand2.Parameters.AddWithValue("@mentorValue", HttpUtility.UrlDecode(mentorId));
 
 
@@ -652,7 +653,7 @@ namespace ProjectTemplate
         }
 
         [WebMethod(EnableSession = true)]
-        public void RejectMentorRequest()
+        public void RejectMentorRequest(string ID)
         {
             string sqlUpdate = " update mentorRequests set mstatus = 'Rejected' where StaffId = @potentialMentorValue;";
 
@@ -665,7 +666,7 @@ namespace ProjectTemplate
             //tell our command to replace the @parameters with real values
             //we decode them because they came to us via the web so they were encoded
             //for transmission (funky characters escaped, mostly)
-            sqlCommand.Parameters.AddWithValue("@potentialMentorValue", HttpUtility.UrlDecode(GetSessionId()));
+            sqlCommand.Parameters.AddWithValue("@potentialMentorValue", HttpUtility.UrlDecode(ID));
 
 
             con.Open();

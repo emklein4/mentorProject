@@ -476,7 +476,6 @@ function fullMentee(index) {
             // name = document.getElementById('fullname');
             job = document.getElementById('job');
             mb = document.getElementById('mb');
-            disc = document.getElementById('disc');
             email = document.getElementById('email');
 
             console.log(availableMentees);
@@ -485,7 +484,7 @@ function fullMentee(index) {
             document.getElementById('fullname').innerHTML = availableMentees[index].fname + ' ' + availableMentees[index].lname;
             job.innerHTML = availableMentees[index].department + ' - ' + availableMentees[index].role;
             mb.innerHTML = availableMentees[index].mb;
-            disc.innerHTML = availableMentees[index].disc;
+            document.getElementById('disc').innerHTML = availableMentees[index].disc;
             email.innerHTML = availableMentees[index].email;
             email.href = 'mailto:' + availableMentees[index].email;
 
@@ -584,7 +583,8 @@ function adminRequests() {
             ad = document.getElementById('adRequests');
 
             for (var i = 0; i < mentorReq.length; i++) {
-                stmt = stmt + '<li id="' + i + '">' + ' ' + mentorReq[i].fname + ' ' + mentorReq[i].lname + '</h3><button onclick="acceptMentorRequest()">Acccept</button><button onclick="rejectMentorRequest()">Reject</button></li>';
+                console.log(mentorReq[i].id)
+                stmt = stmt + '<li id="' + i + '">' + ' ' + mentorReq[i].fname + ' ' + mentorReq[i].lname + '<button onclick="acceptMentorRequest(' + mentorReq[i].id + ')">Acccept</button><button onclick="rejectMentorRequest(' + mentorReq[i].id + ')">Reject</button></li>';
                 console.log(mentorReq[i]);
             }
             console.log(stmt);
@@ -602,9 +602,9 @@ function adminRequests() {
 }
 
 // admin accepts request from user to be a mentor and changes value of mentor in DB to 1
-function acceptMentorRequest() {
+function acceptMentorRequest(id) {
     var webMethod = "ProjectServices.asmx/AcceptMentorRequest";
-    var parameters = "{}";
+    var parameters = "{\"ID\":\"" + encodeURI(id) + "\"}";
 
     //jQuery ajax method
     $.ajax({
@@ -614,7 +614,8 @@ function acceptMentorRequest() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function () {
-            alert('ran webmethod at least');
+            alert('Accepted');
+            adminRequests();
 
         },
         error: function (e) {
@@ -623,9 +624,9 @@ function acceptMentorRequest() {
     });
 }
 
-function rejectMentorRequest() {
+function rejectMentorRequest(id) {
     var webMethod = "ProjectServices.asmx/RejectMentorRequest";
-    var parameters = "{}";
+    var parameters = "{\"ID\":\"" + encodeURI(id) + "\"}";
 
     //jQuery ajax method
     $.ajax({
@@ -635,7 +636,8 @@ function rejectMentorRequest() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function () {
-            alert('ran webmethod at least');
+            alert('Rejected');
+            adminRequests();
         },
         error: function (e) {
             alert("this code will only execute if javascript is unable to access the webservice");
@@ -662,6 +664,8 @@ function getAccounts() {
                 console.log(accountsArray);
                 //this clears out the div that will hold our account info
                 $("#admin").empty();
+                var z = document.getElementById("Profile");
+                z.style.display = "none";
                 var a = document.getElementById('iFrame');
                 a.style.display = "none";
                 var b = document.getElementById('report');
