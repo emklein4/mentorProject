@@ -92,7 +92,6 @@ function LogOn(email, pass) {
                 //location.replace("homepage.html");
                 
                 LoadUser();
-                loadRequests();
                 
                 
                 //var y = document.getElementById("Logon");
@@ -161,6 +160,7 @@ function LoadUser() {
             if (activeUser.mentorStatus != 1) {
                 var c = document.getElementById("requestMentor");
                 c.style.display = "block";
+                document.getElementById("connectTab").style.display = 'none';
             }
             else {
                 var d = document.getElementById("requestMentor");
@@ -275,6 +275,8 @@ function MentorProfile() {
             document.getElementById("disc").value = mentor.disc;
             document.getElementById("resume").setAttribute("href", mentor.resume);
             document.getElementById("linkedin").setAttribute("href", mentor.linkedin);
+
+            loadRequests();
 
         },
         error: function (e) {
@@ -401,7 +403,7 @@ function loadRequests() {
             for (var i = 0; i < mentorRequests.length; i++) {
                 stmt = stmt + '<li id="' + i + '"><h3><a onclick="moreInfo(' + i +  ')">' + mentorRequests[i].fname +
                     ' ' + mentorRequests[i].lname + '</a></h3><button onclick="acceptRequest(' + mentorRequests[i].id +
-                    ')">Acccept</button><button onclick="rejectRequest(' + mentorRequests[i].id + ')">Reject</button></li>';
+                    ')">Accept</button><button onclick="rejectRequest(' + mentorRequests[i].id + ')">Reject</button></li>';
 
             }
             document.getElementById('mentorList').innerHTML = stmt;
@@ -485,7 +487,7 @@ function fullMentee(index) {
             document.getElementById('fullname').innerHTML = availableMentees[index].fname + ' ' + availableMentees[index].lname;
             job.innerHTML = availableMentees[index].department + ' - ' + availableMentees[index].role;
             mb.innerHTML = availableMentees[index].mb;
-            document.getElementById('disc').innerHTML = availableMentees[index].disc;
+            document.getElementById('menteeDisc').innerHTML = availableMentees[index].disc;
             email.innerHTML = availableMentees[index].email;
             email.href = 'mailto:' + availableMentees[index].email;
 
@@ -513,8 +515,7 @@ function acceptRequest(id) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function () {
-            alert('ran webmethod at least');
-            loadRequests();
+            MentorProfile();
         },
         error: function (e) {
             alert("this code will only execute if javascript is unable to access the webservice");
@@ -535,7 +536,6 @@ function rejectRequest(id) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function () {
-            alert('ran webmethod at least');
             loadRequests();
         },
         error: function (e) {
@@ -587,7 +587,7 @@ function adminRequests() {
 
             for (var i = 0; i < mentorReq.length; i++) {
                 console.log(mentorReq[i].id)
-                stmt = stmt + '<li id="' + i + '">' + ' ' + mentorReq[i].fname + ' ' + mentorReq[i].lname + '<button onclick="acceptMentorRequest(' + mentorReq[i].id + ')">Acccept</button><button onclick="rejectMentorRequest(' + mentorReq[i].id + ')">Reject</button></li>';
+                stmt = stmt + '<li id="' + i + '">' + ' ' + mentorReq[i].fname + ' ' + mentorReq[i].lname + '<button onclick="acceptMentorRequest(' + mentorReq[i].id + ')">Accept</button><button onclick="rejectMentorRequest(' + mentorReq[i].id + ')">Reject</button></li>';
                 console.log(mentorReq[i]);
             }
             console.log(stmt);
@@ -738,7 +738,6 @@ function connectMentee(id) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function () {
-            alert("found and ran webmethod");
             loadMentees();
             let button = document.getElementById('connectButton');
             button.innerHTML = 'Requested!'
