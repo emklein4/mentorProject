@@ -396,17 +396,10 @@ namespace ProjectTemplate
         }
         
         [WebMethod(EnableSession = true)]
-        public void RequestMentee(string menteeId, string message="")
+        public void RequestMentee(string menteeId)
         {
-            string sqlSelect = string.Empty;
-            if (message != "")
-            {
-                sqlSelect = "insert into requests(StaffId, MentorId, request) values(@menteeValue, @mentorValue, @messageValue);";
-            }
-            else
-            {
-                sqlSelect = "insert into requests(StaffId, MentorId) values (@menteeValue, @mentorValue);";
-            }
+            string sqlSelect = "insert into requests(StaffId, MentorId) values (@menteeValue, @mentorValue);";
+
             
 
             //set up our connection object to be ready to use our connection string
@@ -419,7 +412,6 @@ namespace ProjectTemplate
             //for transmission (funky characters escaped, mostly)
             sqlCommand.Parameters.AddWithValue("@mentorValue", HttpUtility.UrlDecode(GetSessionId()));
             sqlCommand.Parameters.AddWithValue("@menteeValue", HttpUtility.UrlDecode(menteeId));
-            sqlCommand.Parameters.AddWithValue("@messageValue", HttpUtility.UrlDecode(message));
 
 
             con.Open();
@@ -440,7 +432,7 @@ namespace ProjectTemplate
         {
 
             DataTable sqlDt = new DataTable("staff");
-            string sqlSelect = "select distinct Staff.StaffId, FirstName, LastName, Department, StaffTitle, myerBriggs, disc, request from Staff left join requests " +
+            string sqlSelect = "select distinct Staff.StaffId, FirstName, LastName, Department, StaffTitle, myerBriggs, disc, resume, LinkedIn, request from Staff left join requests " +
                 "on Staff.StaffId = requests.MentorId where Staff.StaffId in (select MentorId from requests where StaffId = @uidvalue and " +
                 "status = 'Pending');";
 
@@ -466,7 +458,9 @@ namespace ProjectTemplate
                     role = sqlDt.Rows[i]["StaffTitle"].ToString(),
                     mb = sqlDt.Rows[i]["myerBriggs"].ToString(),
                     disc = sqlDt.Rows[i]["disc"].ToString(),
-                    request = sqlDt.Rows[i]["request"].ToString()
+                    request = sqlDt.Rows[i]["request"].ToString(),
+                    resume = sqlDt.Rows[i]["Resume"].ToString(),
+                    linkedin = sqlDt.Rows[i]["LinkedIn"].ToString()
                 });
             }
             //convert the list of accounts to an array and return!
@@ -515,7 +509,7 @@ namespace ProjectTemplate
         [WebMethod(EnableSession = true)]
         public void RejectRequest(string mentorId)
         {
-            string sqlUpdate = " update requests set status = 'Rejected' where StaffId = @menteeValue and MentorId = @mentorValue;";
+            string sqlUpdate = "update requests set status = 'Rejected' where StaffId = @menteeValue and MentorId = @mentorValue;";
 
             //set up our connection object to be ready to use our connection string
             MySqlConnection con = new MySqlConnection(getConString());

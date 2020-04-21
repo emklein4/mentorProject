@@ -81,9 +81,6 @@
         function connectMentee(id, message) {
             var webMethod = "ProjectServices.asmx/RequestMentee";
             var parameters = "{\"menteeId\":\"" + encodeURI(id) + "\"}";
-            if (message != '') {
-                parameters = "{\"menteeId\":\"" + encodeURI(id) + "\", \"message\":\"" + encodeURI(message) + "\"}";
-            }
 
             $.ajax({
                 type: "POST",
@@ -93,6 +90,7 @@
                 dataType: "json",
                 success: function () {
                     alert("found and ran webmethod");
+
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");

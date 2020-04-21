@@ -436,7 +436,7 @@ li a {
 #message {
     height: 30vh;
     width: 80%;
-    display: none;
+    text-align: start;
 }
 
 #connect {
@@ -454,5 +454,3 @@ li a {
         background: #39dc79;
         color: #000;
     }
-
-#menteeArea

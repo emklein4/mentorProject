@@ -139,7 +139,6 @@ function LoadUser() {
             y.style.display = "block";
             var z = document.getElementById("iFrame");
             z.style.display = "block";
-            document.getElementById('menteeArea').style.display = "block";
             var q = document.getElementById("Profile");
             q.style.display = "none";
             var admin = document.getElementById('admin');
@@ -407,8 +406,10 @@ function loadRequests() {
             }
             document.getElementById('mentorList').innerHTML = stmt;
             if (mentorRequests.length > 0) {
-                document.getElementById('mentorPage').innerhtml = mentorRequests.length + " New Mentor Requests!";
                 document.getElementById('mentorHeading').innerHTML = "New Mentor Requests!";
+            }
+            else {
+                document.getElementById('mentorHeading').innerHTML = "";
             }
         },
         error: function (e) {
@@ -431,12 +432,12 @@ function moreInfo(index) {
         success: function (msg) {
             var Requests = msg.d;
             console.log(Requests);
-            let li = document.getElementById(index);
+            /*let li = document.getElementById(index);
             let p = document.createElement('p');
 
             console.log(Requests[index].request);
             p.innerHTML = 'Message from User: ' + Requests[index].request;
-            li.appendChild(p);
+            li.appendChild(p);*/
 
             document.getElementById("fname").value = Requests[index].fname;
             document.getElementById("lname").value = Requests[index].lname;
@@ -489,7 +490,7 @@ function fullMentee(index) {
             email.href = 'mailto:' + availableMentees[index].email;
 
             buttonDiv = document.getElementById('buttonDiv');
-            buttonDiv.innerHTML = '<button type="button" onclick="connectMentee(' + availableMentees[index].id + ')">Connect with ' +
+            buttonDiv.innerHTML = '<button id="connectButton" type="button" onclick="connectMentee(' + availableMentees[index].id + ')">Connect with ' +
                 availableMentees[index].fname + '</button>';
         },
         error: function (e) {
@@ -513,6 +514,7 @@ function acceptRequest(id) {
         dataType: "json",
         success: function () {
             alert('ran webmethod at least');
+            loadRequests();
         },
         error: function (e) {
             alert("this code will only execute if javascript is unable to access the webservice");
@@ -534,6 +536,7 @@ function rejectRequest(id) {
         dataType: "json",
         success: function () {
             alert('ran webmethod at least');
+            loadRequests();
         },
         error: function (e) {
             alert("this code will only execute if javascript is unable to access the webservice");
@@ -724,3 +727,26 @@ function getAccounts() {
     });
 }
 
+function connectMentee(id) {
+    var webMethod = "ProjectServices.asmx/RequestMentee";
+    var parameters = "{\"menteeId\":\"" + encodeURI(id) + "\"}";
+
+    $.ajax({
+        type: "POST",
+        url: webMethod,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function () {
+            alert("found and ran webmethod");
+            loadMentees();
+            let button = document.getElementById('connectButton');
+            button.innerHTML = 'Requested!'
+            button.disabled = true;
+        },
+        error: function (e) {
+            alert("this code will only execute if javascript is unable to access the webservice");
+            console.log(e.responseText);
+        }
+    });
+}
